@@ -1,0 +1,5 @@
+name: Compact
+version: 1.1/stable
+main: me.ninetyeightping.compact.Compact
+author: 98ping
+description: Super compact rank core that has all the features you need
