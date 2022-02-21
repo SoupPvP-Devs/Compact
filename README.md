@@ -13,4 +13,4 @@ Compact is a rank core that I am creating that is super compact but has many ess
 - NoSequel // NV6 - MenuAPI
 - vaperion - Blade
 - LBuddyBoy - Blade fork that looks like qLib
-- FrozenOrb - ItemBulilder & packeting system
+- FrozenOrb - ItemBuilder & packeting system
