@@ -16,6 +16,7 @@ me\ninetyeightping\compact\controller\impl\grants\impl\RankGrantController.class
 me\ninetyeightping\compact\grant\menus\GrantMenu$1.class
 me\ninetyeightping\compact\controller\Controller.class
 me\vaperion\blade\exception\BladeUsageMessage.class
+me\ninetyeightping\compact\punishments\menu\SpecificPunishmentsMenu.class
 me\vaperion\blade\utils\Tuple.class
 me\ninetyeightping\compact\controller\impl\grants\impl\RankGrant.class
 me\vaperion\blade\bindings\impl\provider\WorldBladeProvider.class
@@ -47,6 +48,7 @@ me\vaperion\blade\context\impl\BukkitSender.class
 me\vaperion\blade\service\BladeCommandRegistrar$Registrar.class
 me\ninetyeightping\compact\redis\frontend\impl\GlobalStaffMessagePacket.class
 me\vaperion\blade\Blade.class
+me\ninetyeightping\compact\punishments\commands\PunishmentMenuCommands.class
 me\vaperion\blade\annotation\Permission.class
 me\vaperion\blade\argument\BladeProvider.class
 me\vaperion\blade\Blade$1.class
@@ -55,6 +57,7 @@ me\vaperion\blade\help\impl\NoOpHelpGenerator.class
 me\vaperion\blade\context\WrappedSender.class
 me\ninetyeightping\compact\databasing\MongoConstants.class
 me\ninetyeightping\compact\profile\ProfileListener.class
+me\ninetyeightping\compact\punishments\menu\MainPunishmentsMenu.class
 me\vaperion\blade\container\ContainerCreator.class
 me\vaperion\blade\bindings\impl\DefaultBindings.class
 me\vaperion\blade\utils\EasyMethod.class

@@ -43,6 +43,13 @@ public class Profile extends Model {
                 .findFirst().orElse(null) != null;
     }
 
+    public List<Punishment> getAllPunishmentsByType(PunishmentType type) {
+        return InjectionUtil.get(PunishmentController.class)
+                .cache.stream()
+                .filter(punishment -> punishment.getTarget().toString().equalsIgnoreCase(uuid) && punishment.getGrantable() == type)
+                .collect(Collectors.toList());
+    }
+
     public Punishment getFirstPunishmentByType(PunishmentType type) {
         return InjectionUtil.get(PunishmentController.class)
                 .cache.stream()

@@ -54,25 +54,26 @@ public class GrantMenu extends PaginatedMenu {
         }
     }
 
-    private void reasonConvo(Player player, Rank rank){
+    private void reasonConvo(Player player, Rank rank) {
         player.closeInventory();
         grantrank = rank;
         ConversationFactory factory = new ConversationFactory(Compact.getInstance()).withModality(true).withPrefix(new NullConversationPrefix()).withFirstPrompt(new StringPrompt() {
             public String getPromptText(ConversationContext context) {
                 return Chat.format("&ePlease type a reason for this grant, or type &ccancel &eto cancel.");
             }
+
             public Prompt acceptInput(ConversationContext context, String input) {
                 if (input.equalsIgnoreCase("cancel")) {
                     context.getForWhom().sendRawMessage(Chat.format("&cGrant process aborted."));
                     return Prompt.END_OF_CONVERSATION;
-                }else {
+                } else {
                     String reason = input;
 
                     grantreason = reason;
 
                     Bukkit.getScheduler().runTaskLater(Compact.getInstance(), () -> {
                         durationConversation(getPlayer());
-                    }, 15L);
+                    }, 1L);
 
                     return Prompt.END_OF_CONVERSATION;
                 }
@@ -82,17 +83,18 @@ public class GrantMenu extends PaginatedMenu {
         player.beginConversation(con);
     }
 
-    private void durationConversation(Player player){
+    private void durationConversation(Player player) {
         player.closeInventory();
         ConversationFactory factory = new ConversationFactory(Compact.getInstance()).withModality(true).withPrefix(new NullConversationPrefix()).withFirstPrompt(new StringPrompt() {
             public String getPromptText(ConversationContext context) {
                 return Chat.format("&ePlease type a duration for this grant, (\"perm\" for permanent), or type &ccancel &eto cancel.");
             }
+
             public Prompt acceptInput(ConversationContext context, String input) {
                 if (input.equalsIgnoreCase("cancel")) {
                     context.getForWhom().sendRawMessage(Chat.format("&cGrant process aborted."));
                     return Prompt.END_OF_CONVERSATION;
-                }else {
+                } else {
                     long duration = TimeUtil.parseTime(input);
                     if (duration <= 0L) {
                         player.sendMessage(Chat.format("&cInvalid time, grant process aborted."));
@@ -102,10 +104,10 @@ public class GrantMenu extends PaginatedMenu {
                     grantDuration = duration;
 
                     Bukkit.getScheduler().runTaskLater(Compact.getInstance(), () -> {
-                    RankGrant rankGrant = new RankGrant(UUID.fromString(target.getUuid()), player.getUniqueId(), grantreason, grantDuration, grantrank);
-                    InjectionUtil.get(RankGrantController.class).create(rankGrant);
-                    player.sendMessage(Chat.format("&aGranted &f" + target.getUsername() + " &athe " + grantrank.getColor() + grantrank.getDisplayName() + " &arank"));
-                    }, 15L);
+                        RankGrant rankGrant = new RankGrant(UUID.fromString(target.getUuid()), player.getUniqueId(), grantreason, grantDuration, grantrank);
+                        InjectionUtil.get(RankGrantController.class).create(rankGrant);
+                        player.sendMessage(Chat.format("&aGranted &f" + target.getUsername() + " &athe " + grantrank.getColor() + grantrank.getDisplayName() + " &arank"));
+                    }, 1L);
                     return Prompt.END_OF_CONVERSATION;
                 }
             }

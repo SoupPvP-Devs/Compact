@@ -15,6 +15,7 @@ import me.ninetyeightping.compact.models.impl.Profile;
 import me.ninetyeightping.compact.profile.ProfileListener;
 import me.ninetyeightping.compact.profile.adapt.ProfileAdapter;
 import me.ninetyeightping.compact.punishments.commands.ForeverPunishmentCommands;
+import me.ninetyeightping.compact.punishments.commands.PunishmentMenuCommands;
 import me.ninetyeightping.compact.punishments.listeners.PunishmentJoinListener;
 import me.ninetyeightping.compact.rank.commands.RankModificationCommands;
 import me.ninetyeightping.compact.redis.backend.PacketHandler;
@@ -60,6 +61,9 @@ public class Compact extends JavaPlugin {
         Blade.of().fallbackPrefix("Compact").binding(new BukkitBindings())
                 .bind(Profile.class, new ProfileAdapter())
                 .containerCreator(BukkitCommandContainer.CREATOR)
-                .build().register(new GrantCommands()).register(new RankModificationCommands()).register(new ForeverPunishmentCommands());
+                .build().register(new GrantCommands())
+                .register(new RankModificationCommands())
+                .register(new ForeverPunishmentCommands())
+                .register(new PunishmentMenuCommands());
     }
 }

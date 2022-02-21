@@ -12,6 +12,25 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 
 public class PunishmentJoinListener implements Listener {
 
+    @EventHandler
+    public void tryToJoinWhileBlacklist(AsyncPlayerPreLoginEvent event) {
+
+        Profile profile = CompactAPI.getProfile(event.getUniqueId());
+
+        if (profile == null) return;
+
+        if (profile.hasActivePunishmentByType(PunishmentType.BLACKLIST)) {
+
+            Punishment punishment = profile.getFirstPunishmentByType(PunishmentType.BLACKLIST);
+
+            event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
+            event.setKickMessage(Chat.format("&cYou are currently blacklisted\n&cExpires In: " + (punishment.getDuration() == Long.MAX_VALUE ? "Never" : TimeUtil.formatDuration(punishment.getRemainingTime()))));
+
+
+        }
+
+
+    }
 
     @EventHandler
     public void tryToJoinWhileBanned(AsyncPlayerPreLoginEvent event) {
@@ -25,7 +44,7 @@ public class PunishmentJoinListener implements Listener {
             Punishment punishment = profile.getFirstPunishmentByType(PunishmentType.BAN);
 
             event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
-            event.setKickMessage(Chat.format("&cYou are currently banned\n&cExpires In: " + (punishment.getDuration() == Long.MAX_VALUE ? "Forever" : TimeUtil.formatDuration(punishment.getDuration()))));
+            event.setKickMessage(Chat.format("&cYou are currently banned\n&cExpires In: " + (punishment.getDuration() == Long.MAX_VALUE ? "Never" : TimeUtil.formatDuration(punishment.getRemainingTime()))));
 
 
         }

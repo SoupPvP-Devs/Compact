@@ -8,7 +8,7 @@ import org.bukkit.ChatColor;
 @AllArgsConstructor
 public enum PunishmentType {
 
-    BLACKLIST("Blacklist", "blacklisted", "unblacklisted", ChatColor.DARK_RED),
+    BLACKLIST("Blacklist", "blacklisted", "unblacklisted", ChatColor.DARK_GRAY),
     BAN("Ban", "banned", "unbanned", ChatColor.RED),
     MUTE("Mute", "muted", "unmuted", ChatColor.GOLD),
     WARN("Warn", "warned", "unwarned", ChatColor.YELLOW);

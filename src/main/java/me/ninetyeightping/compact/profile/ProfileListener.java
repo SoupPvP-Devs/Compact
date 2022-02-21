@@ -16,7 +16,7 @@ public class ProfileListener implements Listener {
     public void asyncJoin(AsyncPlayerPreLoginEvent event) {
         if (!InjectionUtil.get(ProfileController.class).exists(event.getUniqueId().toString())) {
 
-            InjectionUtil.get(ProfileController.class).queueProfileForCreation(new Profile(event.getUniqueId().toString(), event.getName(), new JSONObject(), new ArrayList<>()));
+            InjectionUtil.get(ProfileController.class).create(new Profile(event.getUniqueId().toString(), event.getName(), new JSONObject(), new ArrayList<>()));
         }
     }
 }

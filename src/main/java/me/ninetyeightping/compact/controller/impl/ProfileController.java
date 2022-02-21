@@ -13,13 +13,12 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ForkJoinPool;
 import java.util.stream.Collectors;
 
 public class ProfileController extends Controller<Profile> {
 
     public List<Profile> cache = new CopyOnWriteArrayList<>();
-
-    public final Deque<Profile> profilecreationqueue = new LinkedList<>();
 
     private MongoCollection<Document> mongoCollection;
 
@@ -31,26 +30,19 @@ public class ProfileController extends Controller<Profile> {
 
         refresh();
 
-        Bukkit.getScheduler().runTaskTimerAsynchronously(Compact.getInstance(), () -> {
 
-            Profile firstProfileInDequeue = profilecreationqueue.pollFirst();
-
-            if (firstProfileInDequeue == null) return;
-
-            System.out.println("Sent profile to mongo : " + firstProfileInDequeue.getUuid() + ". Then removed it");
-
-            firstProfileInDequeue.save();
-            refresh();
-        }, 0L, 20L);
     }
 
-    public void queueProfileForCreation(Profile profile) {
+    public void create(Profile profile) {
 
-        //add to cache then save to mongo later
-        cache.add(profile);
+        ForkJoinPool.commonPool().execute(() -> {
+            System.out.println("Sent profile to mongo : " + profile.getUuid() + ".");
+
+            profile.save();
+            refresh();
+        });
 
 
-        profilecreationqueue.add(profile);
     }
 
     @Override

@@ -23,7 +23,7 @@ public class PunishmentKickPacket implements RedisPacket {
 
         if (bukkitplayer == null) return;
 
-        bukkitplayer.kickPlayer(Chat.format("&cYou are currently " + punishment.getGrantable().getAdded() + "\n&cExpires In: " + (punishment.getDuration() == Long.MAX_VALUE ? "Forever" : TimeUtil.formatDuration(punishment.getDuration()))));
+        bukkitplayer.kickPlayer(Chat.format("&cYou are currently " + punishment.getGrantable().getAdded() + "\n&cExpires In: " + (punishment.getDuration() == Long.MAX_VALUE ? "Never" : TimeUtil.formatDuration(punishment.getRemainingTime()))));
     }
 }
 

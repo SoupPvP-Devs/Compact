@@ -18,7 +18,17 @@ public class ForeverPunishmentCommands {
     @Permission(value = "compact.ban")
     public void ban(@Sender CommandSender sender, @Param("target")Profile target, @Flag(value = 's', description = "Silently ban the player") boolean silent, @Param("reason") @Combined String reason) {
 
-        Punishment punishment = new Punishment(UUID.randomUUID(), (sender instanceof Player ? ((Player) sender).getUniqueId() : CompactAPI.getConsoleUUID()), UUID.fromString(target.getUuid()), reason, Long.MAX_VALUE, PunishmentType.BAN);
+        Punishment punishment = new Punishment(UUID.randomUUID(), UUID.fromString(target.getUuid()), (sender instanceof Player ? ((Player) sender).getUniqueId() : CompactAPI.getConsoleUUID()), reason, Long.MAX_VALUE, PunishmentType.BAN);
+
+        InjectionUtil.get(PunishmentController.class).dispatch(punishment, silent);
+
+    }
+
+    @Command(name = "blacklist")
+    @Permission(value = "compact.blacklist")
+    public void blacklist(@Sender CommandSender sender, @Param("target")Profile target, @Flag(value = 's', description = "Silently blacklist the player") boolean silent, @Param("reason") @Combined String reason) {
+
+        Punishment punishment = new Punishment(UUID.randomUUID(), UUID.fromString(target.getUuid()), (sender instanceof Player ? ((Player) sender).getUniqueId() : CompactAPI.getConsoleUUID()), reason, Long.MAX_VALUE, PunishmentType.BLACKLIST);
 
         InjectionUtil.get(PunishmentController.class).dispatch(punishment, silent);
 

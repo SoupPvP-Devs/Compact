@@ -29,6 +29,20 @@ public class PunishmentController extends Controller<Punishment> {
         super(mongoCollection);
 
         this.mongoCollection = mongoCollection;
+
+        refresh();
+
+        Bukkit.getScheduler().runTaskTimer(Compact.getInstance(), () -> {
+            for (Punishment punishment : cache) {
+
+                if (punishment.getRemainingTime() <= 0 && punishment.isActive()) {
+
+                    punishment.setRemovedReason("Expired");
+                    punishment.setRemovedAt(System.currentTimeMillis());
+                    punishment.setRemovedBy(CompactAPI.getConsoleUUID());
+                }
+            }
+        }, 0L, 20L);
     }
 
     public void dispatch(Punishment punishment, boolean silent) {
