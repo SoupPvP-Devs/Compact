@@ -27,7 +27,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Compact extends JavaPlugin {
     @Getter private static Compact instance;
-    @Getter private static Blade blade;
 
 
 
