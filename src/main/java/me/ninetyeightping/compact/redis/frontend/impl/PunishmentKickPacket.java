@@ -1,6 +1,7 @@
 package me.ninetyeightping.compact.redis.frontend.impl;
 
 import me.ninetyeightping.compact.controller.impl.grants.impl.Punishment;
+import me.ninetyeightping.compact.punishments.PunishmentType;
 import me.ninetyeightping.compact.redis.backend.RedisPacket;
 import me.ninetyeightping.compact.util.Chat;
 import me.ninetyeightping.compact.util.TimeUtil;
@@ -23,7 +24,10 @@ public class PunishmentKickPacket implements RedisPacket {
 
         if (bukkitplayer == null) return;
 
-        bukkitplayer.kickPlayer(Chat.format("&cYou are currently " + punishment.getGrantable().getAdded() + "\n&cExpires In: " + (punishment.getDuration() == Long.MAX_VALUE ? "Never" : TimeUtil.formatDuration(punishment.getRemainingTime()))));
+        if (punishment.getGrantable() == PunishmentType.BAN || punishment.getGrantable() == PunishmentType.BLACKLIST) {
+
+            bukkitplayer.kickPlayer(Chat.format("&cYou are currently " + punishment.getGrantable().getAdded() + "\n&cExpires In: " + (punishment.getDuration() == Long.MAX_VALUE ? "Never" : TimeUtil.formatDuration(punishment.getRemainingTime()))));
+        }
     }
 }
 

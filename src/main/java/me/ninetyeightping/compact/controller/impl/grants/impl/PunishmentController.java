@@ -47,7 +47,7 @@ public class PunishmentController extends Controller<Punishment> {
 
     public void dispatch(Punishment punishment, boolean silent) {
         save(punishment);
-        PacketHandler.sendToAll(new GlobalStaffMessagePacket((silent ? "&7[Silent]" : "") + (CompactAPI.getColoredDisplay(punishment.getExecutor()) +
+        PacketHandler.sendToAll(new GlobalStaffMessagePacket((silent ? "&7[Silent] " : "") + (CompactAPI.getColoredDisplay(punishment.getExecutor()) +
                 " &ahas " + punishment.getGrantable().getAdded() +  " " + CompactAPI.getColoredDisplay(punishment.getTarget()) + " &afor &f"
                 + punishment.getReason() +
                 " &7(" + (punishment.getDuration() == Long.MAX_VALUE ? "Forever" : TimeUtil.formatDuration(punishment.getDuration())) + ")")));

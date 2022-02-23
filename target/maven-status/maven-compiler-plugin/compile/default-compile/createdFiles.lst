@@ -1,6 +1,7 @@
 me\ninetyeightping\compact\controller\impl\ProfileController.class
 me\ninetyeightping\compact\injection\InjectionUtil.class
 me\ninetyeightping\compact\grant\menus\GrantMenu.class
+me\ninetyeightping\compact\punishments\commands\TemporaryPunishmentCommands.class
 me\vaperion\blade\bindings\impl\provider\OfflinePlayerBladeProvider.class
 me\vaperion\blade\argument\BladeArgument$Type.class
 me\ninetyeightping\compact\controller\impl\grants\impl\PunishmentController.class
