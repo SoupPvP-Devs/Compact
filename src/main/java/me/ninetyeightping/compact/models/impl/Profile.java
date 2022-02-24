@@ -12,12 +12,10 @@ import me.ninetyeightping.compact.controller.impl.grants.impl.RankGrant;
 import me.ninetyeightping.compact.controller.impl.grants.impl.RankGrantController;
 import me.ninetyeightping.compact.injection.InjectionUtil;
 import me.ninetyeightping.compact.models.Model;
-import me.ninetyeightping.compact.punishments.PunishmentType;
+import me.ninetyeightping.compact.general.punishments.PunishmentType;
 import org.json.simple.JSONObject;
 
 import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Getter

@@ -2,7 +2,7 @@ package me.ninetyeightping.compact.controller.impl.grants.impl;
 
 import me.ninetyeightping.compact.Compact;
 import me.ninetyeightping.compact.controller.impl.grants.Grantable;
-import me.ninetyeightping.compact.punishments.PunishmentType;
+import me.ninetyeightping.compact.general.punishments.PunishmentType;
 
 import java.util.UUID;
 

@@ -1,14 +1,12 @@
 package me.ninetyeightping.compact.redis.frontend.impl;
 
 import me.ninetyeightping.compact.controller.impl.grants.impl.Punishment;
-import me.ninetyeightping.compact.punishments.PunishmentType;
+import me.ninetyeightping.compact.general.punishments.PunishmentType;
 import me.ninetyeightping.compact.redis.backend.RedisPacket;
 import me.ninetyeightping.compact.util.Chat;
 import me.ninetyeightping.compact.util.TimeUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 public class PunishmentKickPacket implements RedisPacket {
 

@@ -5,24 +5,28 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.LongSerializationPolicy;
 import io.github.nosequel.menu.MenuHandler;
 import lombok.Getter;
+import me.ninetyeightping.compact.controller.impl.NetworkServerController;
 import me.ninetyeightping.compact.controller.impl.ProfileController;
 import me.ninetyeightping.compact.controller.impl.RankController;
 import me.ninetyeightping.compact.controller.impl.grants.impl.PunishmentController;
 import me.ninetyeightping.compact.controller.impl.grants.impl.RankGrantController;
 import me.ninetyeightping.compact.databasing.MongoConstants;
-import me.ninetyeightping.compact.grant.GrantCommands;
+import me.ninetyeightping.compact.general.grant.GrantCommands;
+import me.ninetyeightping.compact.general.networkserver.NetworkServerThread;
 import me.ninetyeightping.compact.models.impl.Profile;
-import me.ninetyeightping.compact.profile.ProfileListener;
-import me.ninetyeightping.compact.profile.adapt.ProfileAdapter;
-import me.ninetyeightping.compact.punishments.commands.ForeverPunishmentCommands;
-import me.ninetyeightping.compact.punishments.commands.PunishmentMenuCommands;
-import me.ninetyeightping.compact.punishments.commands.TemporaryPunishmentCommands;
-import me.ninetyeightping.compact.punishments.listeners.PunishmentJoinListener;
-import me.ninetyeightping.compact.rank.commands.RankModificationCommands;
+import me.ninetyeightping.compact.general.profile.ProfileListener;
+import me.ninetyeightping.compact.general.profile.adapt.ProfileAdapter;
+import me.ninetyeightping.compact.general.punishments.commands.ForeverPunishmentCommands;
+import me.ninetyeightping.compact.general.punishments.commands.PunishmentMenuCommands;
+import me.ninetyeightping.compact.general.punishments.commands.TemporaryPunishmentCommands;
+import me.ninetyeightping.compact.general.punishments.listeners.PunishmentJoinListener;
+import me.ninetyeightping.compact.general.rank.commands.RankModificationCommands;
 import me.ninetyeightping.compact.redis.backend.PacketHandler;
+import me.ninetyeightping.compact.general.staff.StaffJoinAndLeaveMessageListener;
 import me.vaperion.blade.Blade;
 import me.vaperion.blade.bindings.impl.BukkitBindings;
 import me.vaperion.blade.container.impl.BukkitCommandContainer;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Compact extends JavaPlugin {
@@ -37,6 +41,7 @@ public class Compact extends JavaPlugin {
     @Getter public RankController rankController;
     @Getter public RankGrantController rankGrantController;
     @Getter public PunishmentController punishmentController;
+    @Getter public NetworkServerController networkServerController;
 
 
     @Override
@@ -54,9 +59,13 @@ public class Compact extends JavaPlugin {
         rankController = new RankController(MongoConstants.ranks);
         rankGrantController = new RankGrantController(MongoConstants.rankGrants);
         punishmentController = new PunishmentController(MongoConstants.punishments);
+        networkServerController = new NetworkServerController(MongoConstants.networkServer);
 
         getServer().getPluginManager().registerEvents(new ProfileListener(), this);
         getServer().getPluginManager().registerEvents(new PunishmentJoinListener(), this);
+        getServer().getPluginManager().registerEvents(new StaffJoinAndLeaveMessageListener(), this);
+
+        Bukkit.getScheduler().runTask(this, NetworkServerThread::checkForOfflineServers);
 
         Blade.of().fallbackPrefix("Compact").binding(new BukkitBindings())
                 .bind(Profile.class, new ProfileAdapter())

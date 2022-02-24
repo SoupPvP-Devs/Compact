@@ -15,6 +15,7 @@ public class MongoConstants {
     public static MongoCollection<Document> ranks;
     public static MongoCollection<Document> rankGrants;
     public static MongoCollection<Document> punishments;
+    public static MongoCollection<Document> networkServer;
 
     public static void loadConnections() {
         client = new MongoClient(new MongoClientURI(Compact.getInstance().getConfig().getString("uri")));
@@ -24,6 +25,7 @@ public class MongoConstants {
         ranks = mongoDatabase.getCollection("ranks");
         rankGrants = mongoDatabase.getCollection("rankGrants");
         punishments = mongoDatabase.getCollection("punishments");
+        networkServer = mongoDatabase.getCollection("networkServers");
     }
 
 

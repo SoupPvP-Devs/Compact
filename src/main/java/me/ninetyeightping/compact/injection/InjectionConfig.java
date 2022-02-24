@@ -2,6 +2,7 @@ package me.ninetyeightping.compact.injection;
 
 import com.mongodb.client.MongoCollection;
 import me.ninetyeightping.compact.Compact;
+import me.ninetyeightping.compact.controller.impl.NetworkServerController;
 import me.ninetyeightping.compact.controller.impl.ProfileController;
 import me.ninetyeightping.compact.controller.impl.RankController;
 import me.ninetyeightping.compact.controller.impl.grants.impl.PunishmentController;
@@ -20,10 +21,16 @@ public class InjectionConfig {
     public RankController rankController = Compact.getInstance().getRankController();
     public RankGrantController rankGrantController = Compact.getInstance().getRankGrantController();
     public PunishmentController punishmentController = Compact.getInstance().getPunishmentController();
+    public NetworkServerController networkServerController = Compact.getInstance().getNetworkServerController();
 
     @Bean
     public ProfileController profileController() {
         return profileController;
+    }
+
+    @Bean
+    public NetworkServerController networkServerController() {
+        return networkServerController;
     }
 
     @Bean
