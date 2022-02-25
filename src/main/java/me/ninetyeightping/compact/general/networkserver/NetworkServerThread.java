@@ -13,7 +13,8 @@ import java.util.logging.Level;
 
 public class NetworkServerThread {
 
-    public static void checkForOfflineServers() {
+    public static void checkForOfflineServers()
+    {
 
         final ScheduledExecutorService service = Executors
                 .newSingleThreadScheduledExecutor();
@@ -22,7 +23,6 @@ public class NetworkServerThread {
             final NetworkServerController networkServerController = InjectionUtil
                     .get(NetworkServerController.class);
 
-            // make sure cache is a CopyOnWriteArrayList or ConcurrentHashMap
             for (NetworkServer networkServer : networkServerController.cache)
             {
                 if (System.currentTimeMillis() - networkServer.lastResponded >= TimeUnit.SECONDS.toMillis(10) && networkServer.responding) {

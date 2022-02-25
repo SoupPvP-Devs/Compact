@@ -1,4 +1,7 @@
 uri: "mongodb://localhost:27017"
+server:
+  id: "server1" #No Spaces
+  displayName: "Server 1" #Spaces
 jedis:
   host: "127.0.0.1"
   port: 6379
