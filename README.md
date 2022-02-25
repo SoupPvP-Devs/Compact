@@ -1,16 +1,34 @@
-# Compact
+<h1 align="center">Welcome to Compact Rank Core 👋</h1>
+<p>
+  <img alt="Version" src="https://img.shields.io/badge/version-1.43-blue.svg?cacheSeconds=2592000" />
+  <a href="https://github.com/kefranabg/readme-md-generator#readme" target="_blank">
+    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
+  </a>
+  <a href="https://github.com/kefranabg/readme-md-generator/graphs/commit-activity" target="_blank">
+    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
+  </a>
+</p>
 
-Background
-Compact is a rank core that I am creating that is super compact but has many essential features that people need in a rank core
+## Compile
 
-# Features
-- Fully working granting system
-- Fully working punishments
-- Ranks
-- Profiles
+> Requires maven & an IDE
 
-# Credits
-- NoSequel // NV6 - MenuAPI
-- vaperion - Blade
-- LBuddyBoy - Blade fork that looks like qLib
-- FrozenOrb - ItemBuilder & packeting system
+Purely just install the project with maven or however you package your jars
+
+## Author
+
+👤 **98ping**
+
+Special thanks to, **NV6**, **LBuddyBoy**, **vaperion**, and **Frozenorb Games**
+
+## Contributing
+
+Make a PR or an issue and once I resolve it, ill update the repository
+
+## Support My Creation
+
+Give a ⭐️ if you like the features. Helps the project get to a wider audience
+
+## 📝 License
+
+Free to use for any project just credit creator as 98ping or Matrix Studios<br />
