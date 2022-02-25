@@ -23,6 +23,6 @@ public class MainHeartbeatThread {
             Compact.getInstance().getRankController().refresh();
             Compact.getInstance().getRankGrantController().refresh();
 
-        }, 0L, 40L, TimeUnit.SECONDS);
+        }, 0L, 2L, TimeUnit.SECONDS);
     }
 }

@@ -58,13 +58,11 @@ public class Profile extends Model {
     public Rank getHighestRank() {
         Rank highest = InjectionUtil.get(RankController.class).getById("default");
         for (RankGrant rankGrant : fetchGrants().stream().filter(RankGrant::isActive).collect(Collectors.toList())) {
-            if (rankGrant.getGrantable() != null) {
 
-                if (highest.getInternalWeight() < rankGrant.getGrantable().getInternalWeight()) {
+            if (highest.getInternalWeight() < rankGrant.getGrantable().getInternalWeight()) {
 
 
-                    highest = rankGrant.getGrantable();
-                }
+                highest = rankGrant.getGrantable();
             }
         }
         return highest;

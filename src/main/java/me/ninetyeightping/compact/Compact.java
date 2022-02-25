@@ -63,6 +63,7 @@ public class Compact extends JavaPlugin {
         MongoConstants.loadConnections();
         PacketHandler.init();
 
+
         //putting these here because in order to make sure that injection works I put em here. will change at some point
 
         profileController = new ProfileController(MongoConstants.profiles);
@@ -70,10 +71,11 @@ public class Compact extends JavaPlugin {
         rankGrantController = new RankGrantController(MongoConstants.rankGrants);
         punishmentController = new PunishmentController(MongoConstants.punishments);
         networkServerController = new NetworkServerController(MongoConstants.networkServer);
+        System.out.println("c");
 
-        if (!networkServerController.exists(getConfig().getString("server.name")))
+        if (!networkServerController.exists(getConfig().getString("server.id")))
         {
-            NetworkServer networkServer = new NetworkServer(getConfig().getString("server.name"),
+            NetworkServer networkServer = new NetworkServer(getConfig().getString("server.id"),
                     getConfig().getString("server.displayName"),
                     0,
                     true,
@@ -83,13 +85,15 @@ public class Compact extends JavaPlugin {
             Bukkit.getLogger().log(Level.FINE, "Created local NetworkServer because one was not found");
         }
 
-        localNetworkServer = networkServerController.getById(getConfig().getString("server.name"));
+        localNetworkServer = networkServerController.getById(getConfig().getString("server.id"));
         Bukkit.getLogger().log(Level.FINE, "Found local NetworkServer");
 
         getServer().getPluginManager().registerEvents(new ProfileListener(), this);
         getServer().getPluginManager().registerEvents(new PunishmentJoinListener(), this);
         getServer().getPluginManager().registerEvents(new StaffJoinAndLeaveMessageListener(), this);
         Bukkit.getLogger().log(Level.FINE, "Listeners registered");
+
+        System.out.println("e");
 
         Bukkit.getScheduler().runTask(this, NetworkServerThread::checkForOfflineServers);
         Bukkit.getScheduler().runTask(this, MainHeartbeatThread::startHeartbeat);

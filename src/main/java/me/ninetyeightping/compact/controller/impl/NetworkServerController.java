@@ -22,6 +22,8 @@ public class NetworkServerController extends Controller<NetworkServer> {
         super(mongoCollection);
 
         this.collection = mongoCollection;
+
+        refresh();
     }
 
     @Override

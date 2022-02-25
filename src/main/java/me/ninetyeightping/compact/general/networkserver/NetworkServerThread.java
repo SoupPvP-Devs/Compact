@@ -25,9 +25,10 @@ public class NetworkServerThread {
 
             for (NetworkServer networkServer : networkServerController.cache)
             {
-                if (System.currentTimeMillis() - networkServer.lastResponded >= TimeUnit.SECONDS.toMillis(10) && networkServer.responding) {
+                if (networkServer.lastResponded - System.currentTimeMillis() >= TimeUnit.SECONDS.toMillis(10) && networkServer.responding) {
                     Bukkit.getLogger().log(Level.SEVERE, "Server " + networkServer.displayName + " has taken more than 10 seconds to respond.");
                     networkServer.responding = false;
+                    networkServer.save();
                     return;
                 }
 
