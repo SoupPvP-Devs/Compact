@@ -21,34 +21,34 @@ public class MainPunishmentsMenu extends Menu {
         this.target = target;
     }
 
+    public void playNextMenu(PunishmentType punishmentType) {
+        new SpecificPunishmentsMenu(getPlayer(), target, punishmentType).updateMenu();
+    }
+
     @Override
     public void tick() {
         buttons[1] = new Button(Material.WOOL).setDisplayName(Chat.format("&eWarns")).setData(DyeColor.YELLOW.getWoolData()).setClickAction(event -> {
+            getPlayer().closeInventory();
             Bukkit.getScheduler().runTaskLater(Compact.getInstance(), () -> {
-                getPlayer().closeInventory();
-                event.setCancelled(true);
-                new SpecificPunishmentsMenu(getPlayer(), target, PunishmentType.WARN).updateMenu();
+                playNextMenu(PunishmentType.WARN);
             },  5L);
         });
         buttons[3] = new Button(Material.WOOL).setDisplayName(Chat.format("&6Mutes")).setData(DyeColor.ORANGE.getWoolData()).setClickAction(event -> {
-                    Bukkit.getScheduler().runTaskLater(Compact.getInstance(), () -> {
-                        getPlayer().closeInventory();
-                        event.setCancelled(true);
-                        new SpecificPunishmentsMenu(getPlayer(), target, PunishmentType.MUTE).updateMenu();
-                    },  5L);
+            getPlayer().closeInventory();
+            Bukkit.getScheduler().runTaskLater(Compact.getInstance(), () -> {
+                playNextMenu(PunishmentType.MUTE);
+            },  5L);
         });
         buttons[5] = new Button(Material.WOOL).setDisplayName(Chat.format("&cBans")).setData(DyeColor.RED.getWoolData()).setClickAction(event -> {
+            getPlayer().closeInventory();
             Bukkit.getScheduler().runTaskLater(Compact.getInstance(), () -> {
-                getPlayer().closeInventory();
-                event.setCancelled(true);
-                new SpecificPunishmentsMenu(getPlayer(), target, PunishmentType.BAN).updateMenu();
+                playNextMenu(PunishmentType.BAN);
             },  5L);
         });
         buttons[7] = new Button(Material.WOOL).setDisplayName(Chat.format("&8Blacklists")).setData(DyeColor.BLACK.getWoolData()).setClickAction(event -> {
+            getPlayer().closeInventory();
             Bukkit.getScheduler().runTaskLater(Compact.getInstance(), () -> {
-                getPlayer().closeInventory();
-                event.setCancelled(true);
-                new SpecificPunishmentsMenu(getPlayer(), target, PunishmentType.BLACKLIST).updateMenu();
+                playNextMenu(PunishmentType.BLACKLIST);
             },  5L);
         });
     }
