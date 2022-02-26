@@ -1,16 +1,15 @@
 package me.vaperion.blade.bindings.impl;
 
 import me.vaperion.blade.bindings.Binding;
-import me.vaperion.blade.bindings.impl.provider.*;
+import me.vaperion.blade.bindings.impl.provider.GameModeBladeProvider;
+import me.vaperion.blade.bindings.impl.provider.OfflinePlayerBladeProvider;
+import me.vaperion.blade.bindings.impl.provider.PlayerBladeProvider;
 import me.vaperion.blade.service.BladeCommandService;
 import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class BukkitBindings implements Binding {
@@ -21,9 +20,6 @@ public class BukkitBindings implements Binding {
     public void bind(@NotNull BladeCommandService commandService) {
         commandService.bindProvider(Player.class, new PlayerBladeProvider());
         commandService.bindProvider(OfflinePlayer.class, new OfflinePlayerBladeProvider());
-        commandService.bindProvider(Permission.class, new PermissionBladeProvider());
-        commandService.bindProvider(World.class, new WorldBladeProvider());
-        commandService.bindProvider(String[].class, new StringBladeProvider());
         commandService.bindProvider(GameMode.class, new GameModeBladeProvider());
     }
 

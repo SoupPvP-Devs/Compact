@@ -5,6 +5,7 @@ import me.vaperion.blade.Blade;
 import me.vaperion.blade.annotation.Command;
 import me.vaperion.blade.annotation.Permission;
 import me.vaperion.blade.command.BladeCommand;
+import me.vaperion.blade.utils.ClassUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +28,7 @@ public class BladeCommandRegistrar {
                 Command command = clazz.getAnnotation(Command.class);
                 Permission permission = clazz.getAnnotation(Permission.class);
                 parent = new BladeCommand(commandService, instance, null,
-                      Arrays.stream(command.name()).map(String::toLowerCase).toArray(String[]::new), command, permission);
+                      Arrays.stream(command.value()).map(String::toLowerCase).toArray(String[]::new), command, permission);
             }
 
             for (Method method : clazz.getMethods()) {
@@ -46,7 +47,7 @@ public class BladeCommandRegistrar {
         Command command = method.getAnnotation(Command.class);
         Permission permission = method.getAnnotation(Permission.class);
 
-        String[] aliases = parentCommand == null ? command.name() : mutateAliases(command.name(), parentCommand.getAliases());
+        String[] aliases = parentCommand == null ? command.value() : mutateAliases(command.value(), parentCommand.getAliases());
         aliases = Arrays.stream(aliases).map(String::toLowerCase).toArray(String[]::new);
 
         BladeCommand bladeCommand = new BladeCommand(commandService, instance, method, aliases, command, permission);
@@ -75,6 +76,7 @@ public class BladeCommandRegistrar {
         return output.toArray(new String[0]);
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public interface Registrar {
         @NotNull
         BladeCommandService commandService();
@@ -103,6 +105,10 @@ public class BladeCommandRegistrar {
         default Registrar register(@NotNull Object containerInstance) {
             register(containerInstance, containerInstance.getClass());
             return this;
+        }
+
+        default void registerPackage(@NotNull Class<?> clazz, @NotNull String packageName) {
+            ClassUtil.getClassesInPackage(clazz, packageName).forEach(this::register);
         }
     }
 }

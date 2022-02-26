@@ -40,8 +40,8 @@ public class SpecificPunishmentsMenu extends PaginatedMenu {
 
         itemMeta.setDisplayName(Chat.format((punishment.isActive() ? "&a" : "&c") + new Date(punishment.getAddedAt())));
         addToLore(itemMeta, " ");
-        addToLore(itemMeta, "&eBy: &f" + CompactAPI.getColoredDisplay(punishment.getExecutor()));
-        addToLore(itemMeta, "&eTo: &f" + CompactAPI.getColoredDisplay(punishment.getTarget()));
+        addToLore(itemMeta, "&eBy: &f" + CompactAPI.INSTANCE.getColoredDisplay(punishment.getExecutor()));
+        addToLore(itemMeta, "&eTo: &f" + CompactAPI.INSTANCE.getColoredDisplay(punishment.getTarget()));
         addToLore(itemMeta, "&eReason: &f" + punishment.getReason());
         addToLore(itemMeta, "&eDuration: &f" + (punishment.getDuration() == Long.MAX_VALUE ? "Forever" : TimeUtil.formatDuration(punishment.getDuration())));
         if (punishment.isActive()) {
@@ -49,7 +49,7 @@ public class SpecificPunishmentsMenu extends PaginatedMenu {
         }
         if (!punishment.isActive()) {
             addToLore(itemMeta, "&eRemoved Reason: &f" + punishment.getRemovedReason());
-            addToLore(itemMeta, "&eRemoved By: &f" + CompactAPI.getColoredDisplay(punishment.getRemovedBy()));
+            addToLore(itemMeta, "&eRemoved By: &f" + CompactAPI.INSTANCE.getColoredDisplay(punishment.getRemovedBy()));
         }
         addToLore(itemMeta, " ");
 

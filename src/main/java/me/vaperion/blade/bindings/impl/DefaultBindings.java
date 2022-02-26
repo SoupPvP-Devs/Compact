@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.text.DecimalFormat;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 public class DefaultBindings implements Binding {
 
@@ -22,12 +23,17 @@ public class DefaultBindings implements Binding {
 
     @Override
     public void bind(@NotNull BladeCommandService commandService) {
+        commandService.bindProvider(UUID.class, (ctx, arg) -> {
+            try {
+                return UUID.fromString(arg.getString());
+            } catch (Exception ex) {
+                if (arg.getParameter().ignoreFailedArgumentParse()) return null;
+                throw new BladeExitMessage("Error: '" + arg.getString() + "' is not a valid UUID.");
+            }
+        });
 
         commandService.bindProvider(String.class, (ctx, arg) -> {
             if (arg.getString() == null) {
-                if (arg.getParameter().isOptional() && arg.getString().equalsIgnoreCase("perm")) {
-                    return "perm";
-                }
                 if (arg.getParameter().ignoreFailedArgumentParse()) return null;
                 throw new BladeExitMessage("Error: '" + arg.getString() + "' is not a valid string.");
             }

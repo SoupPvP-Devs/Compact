@@ -31,310 +31,313 @@ import java.util.stream.Collectors;
 @Getter
 public class BukkitCommandContainer extends Command implements CommandContainer {
 
-	public static final Field COMMAND_MAP, KNOWN_COMMANDS;
-	public static final ContainerCreator<BukkitCommandContainer> CREATOR = BukkitCommandContainer::new;
+    private static final Field COMMAND_MAP, KNOWN_COMMANDS;
+    public static final ContainerCreator<BukkitCommandContainer> CREATOR = BukkitCommandContainer::new;
 
-	static {
-		Field mapField = null, commandsField = null;
+    static {
+        Field mapField = null, commandsField = null;
 
-		try {
-			mapField = SimplePluginManager.class.getDeclaredField("commandMap");
-			mapField.setAccessible(true);
-			commandsField = SimpleCommandMap.class.getDeclaredField("knownCommands");
-			commandsField.setAccessible(true);
-			Field modifiers = Field.class.getDeclaredField("modifiers");
-			modifiers.setAccessible(true);
+        try {
+            mapField = SimplePluginManager.class.getDeclaredField("commandMap");
+            mapField.setAccessible(true);
+            commandsField = SimpleCommandMap.class.getDeclaredField("knownCommands");
+            commandsField.setAccessible(true);
 
-			modifiers.setInt(mapField, modifiers.getInt(mapField) & ~Modifier.FINAL);
-			modifiers.setInt(commandsField, modifiers.getInt(commandsField) & ~Modifier.FINAL);
-		} catch (Exception ex) {
-			System.err.println("Failed to grab commandMap from the plugin manager.");
-			ex.printStackTrace();
-		}
+            Field modifiers = Field.class.getDeclaredField("modifiers");
+            modifiers.setAccessible(true);
 
-		COMMAND_MAP = mapField;
-		KNOWN_COMMANDS = commandsField;
-	}
+            modifiers.setInt(mapField, modifiers.getInt(mapField) & ~Modifier.FINAL);
+            modifiers.setInt(commandsField, modifiers.getInt(commandsField) & ~Modifier.FINAL);
+        } catch (Exception ex) {
+            System.err.println("Failed to grab commandMap from the plugin manager.");
+            ex.printStackTrace();
+        }
 
-	private final BladeCommandService commandService;
-	private final BladeCommand parentCommand;
+        COMMAND_MAP = mapField;
+        KNOWN_COMMANDS = commandsField;
+    }
 
-	private BukkitCommandContainer(@NotNull BladeCommandService service, @NotNull BladeCommand command, @NotNull String alias, @NotNull String fallbackPrefix) throws Exception {
-		super(alias, command.getDescription(), "/" + alias, new ArrayList<>());
+    private final BladeCommandService commandService;
+    private final BladeCommand parentCommand;
 
-		this.commandService = service;
-		this.parentCommand = command;
+    @SuppressWarnings("unchecked")
+    private BukkitCommandContainer(@NotNull BladeCommandService service, @NotNull BladeCommand command, @NotNull String alias, @NotNull String fallbackPrefix) throws Exception {
+        super(alias, command.getDescription(), "/" + alias, new ArrayList<>());
 
-		SimplePluginManager simplePluginManager = (SimplePluginManager) Bukkit.getServer().getPluginManager();
-		SimpleCommandMap simpleCommandMap = (SimpleCommandMap) COMMAND_MAP.get(simplePluginManager);
+        this.commandService = service;
+        this.parentCommand = command;
 
-		if (service.isOverrideCommands()) {
-			Map<String, Command> knownCommands = (Map<String, Command>) KNOWN_COMMANDS.get(simpleCommandMap);
-			for (Command registeredCommand : new ArrayList<>(knownCommands.values())) {
-				if (doesBukkitCommandConflict(registeredCommand, alias, command)) {
-					registeredCommand.unregister(simpleCommandMap);
-					knownCommands.remove(registeredCommand.getName().toLowerCase(Locale.ENGLISH));
-				}
-			}
-			KNOWN_COMMANDS.set(simpleCommandMap, knownCommands);
-		}
+        SimplePluginManager simplePluginManager = (SimplePluginManager) Bukkit.getServer().getPluginManager();
+        SimpleCommandMap simpleCommandMap = (SimpleCommandMap) COMMAND_MAP.get(simplePluginManager);
 
-		simpleCommandMap.register(fallbackPrefix, this);
-	}
+        if (service.isOverrideCommands()) {
+            Map<String, Command> knownCommands = (Map<String, Command>) KNOWN_COMMANDS.get(simpleCommandMap);
+            for (Command registeredCommand : new ArrayList<>(knownCommands.values())) {
+                if (doesBukkitCommandConflict(registeredCommand, alias, command)) {
+                    registeredCommand.unregister(simpleCommandMap);
+                    knownCommands.remove(registeredCommand.getName().toLowerCase(Locale.ENGLISH));
+                }
+            }
+            KNOWN_COMMANDS.set(simpleCommandMap, knownCommands);
+        }
 
-	private boolean doesBukkitCommandConflict(@NotNull Command bukkitCommand, @NotNull String alias, @NotNull BladeCommand bladeCommand) {
-		if (bukkitCommand instanceof BukkitCommandContainer) return false; // don't override our own commands
-		if (bukkitCommand.getName().equalsIgnoreCase(alias) || bukkitCommand.getAliases().stream().anyMatch(a -> a.equalsIgnoreCase(alias)))
-			return true;
-		for (String realAlias : bladeCommand.getRealAliases()) {
-			if (bukkitCommand.getName().equalsIgnoreCase(realAlias) || bukkitCommand.getAliases().stream().anyMatch(a -> a.equalsIgnoreCase(realAlias)))
-				return true;
-		}
-		return false;
-	}
+        simpleCommandMap.register(fallbackPrefix, this);
+    }
 
-	@Nullable
-	private Tuple<BladeCommand, String> resolveCommand(@NotNull String[] arguments) throws BladeExitMessage {
-		return commandService.getCommandResolver().resolveCommand(arguments);
-	}
+    private boolean doesBukkitCommandConflict(@NotNull Command bukkitCommand, @NotNull String alias, @NotNull BladeCommand bladeCommand) {
+        if (bukkitCommand instanceof BukkitCommandContainer) return false; // don't override our own commands
+        if (bukkitCommand.getName().equalsIgnoreCase(alias) || bukkitCommand.getAliases().stream().anyMatch(a -> a.equalsIgnoreCase(alias)))
+            return true;
+        for (String realAlias : bladeCommand.getRealAliases()) {
+            if (bukkitCommand.getName().equalsIgnoreCase(realAlias) || bukkitCommand.getAliases().stream().anyMatch(a -> a.equalsIgnoreCase(realAlias)))
+                return true;
+        }
+        return false;
+    }
 
-	@NotNull
-	private String getSenderType(@NotNull Class<?> clazz) {
-		switch (clazz.getSimpleName()) {
-			case "Player":
-				return "players";
+    @Nullable
+    private Tuple<BladeCommand, String> resolveCommand(@NotNull String[] arguments) throws BladeExitMessage {
+        return commandService.getCommandResolver().resolveCommand(arguments);
+    }
 
-			case "ConsoleCommandSender":
-				return "the console";
+    @NotNull
+    private String getSenderType(@NotNull Class<?> clazz) {
+        switch (clazz.getSimpleName()) {
+            case "Player":
+                return "players";
 
-			default:
-				return "everyone";
-		}
-	}
+            case "ConsoleCommandSender":
+                return "the console";
 
-	private void sendUsageMessage(@NotNull CommandSender sender, @NotNull String alias, @Nullable BladeCommand command) {
-		if (command == null) return;
-		boolean hasDesc = command.getDescription() != null && !command.getDescription().trim().isEmpty();
+            default:
+                return "everyone";
+        }
+    }
 
-		MessageBuilder builder = new MessageBuilder(ChatColor.RED + "Usage: /").append(ChatColor.RED + alias);
-		if (hasDesc) builder.hover(Collections.singletonList(ChatColor.GRAY + command.getDescription()));
+    private void sendUsageMessage(@NotNull CommandSender sender, @NotNull String alias, @Nullable BladeCommand command) {
+        if (command == null) return;
+        boolean hasDesc = command.getDescription() != null && !command.getDescription().trim().isEmpty();
 
-		Optional.of(command.getFlagParameters())
-				.ifPresent(flagParameters -> {
-					if (!flagParameters.isEmpty()) {
-						builder.append(" ").append(ChatColor.RED + "(").reset();
-						if (hasDesc)
-							builder.hover(Collections.singletonList(ChatColor.GRAY + command.getDescription().trim()));
+        MessageBuilder builder = new MessageBuilder(ChatColor.RED + "Usage: /").append(ChatColor.RED + alias);
+        if (hasDesc) builder.hover(Collections.singletonList(ChatColor.GRAY + command.getDescription()));
 
-						int i = 0;
-						for (BladeParameter.FlagParameter flagParameter : flagParameters) {
-							builder.append(i++ == 0 ? "" : (ChatColor.GRAY + " | ")).reset();
-							if (hasDesc)
-								builder.hover(Collections.singletonList(ChatColor.GRAY + command.getDescription().trim()));
+        Optional.of(command.getFlagParameters())
+              .ifPresent(flagParameters -> {
+                  if (!flagParameters.isEmpty()) {
+                      builder.append(" ").append(ChatColor.RED + "(").reset();
+                      if (hasDesc)
+                          builder.hover(Collections.singletonList(ChatColor.GRAY + command.getDescription().trim()));
 
-							Flag flag = flagParameter.getFlag();
+                      int i = 0;
+                      for (BladeParameter.FlagParameter flagParameter : flagParameters) {
+                          builder.append(i++ == 0 ? "" : (ChatColor.GRAY + " | ")).reset();
+                          if (hasDesc)
+                              builder.hover(Collections.singletonList(ChatColor.GRAY + command.getDescription().trim()));
 
-							builder.append(ChatColor.AQUA + "-" + flag.value());
-							if (!flagParameter.isBooleanFlag())
-								builder.append(ChatColor.AQUA + " <" + flagParameter.getName() + ">");
-							if (!flag.description().trim().isEmpty())
-								builder.hover(Collections.singletonList(ChatColor.YELLOW + flag.description().trim()));
-						}
+                          Flag flag = flagParameter.getFlag();
 
-						builder.append(ChatColor.RED + ")").reset();
-						if (hasDesc)
-							builder.hover(Collections.singletonList(ChatColor.GRAY + command.getDescription().trim()));
-					}
-				});
+                          builder.append(ChatColor.AQUA + "-" + flag.value());
+                          if (!flagParameter.isBooleanFlag())
+                              builder.append(ChatColor.AQUA + " <" + flagParameter.getName() + ">");
+                          if (!flag.description().trim().isEmpty())
+                              builder.hover(Collections.singletonList(ChatColor.YELLOW + flag.description().trim()));
+                      }
 
-		Optional.of(command.getCommandParameters())
-				.ifPresent(commandParameters -> {
-					if (!commandParameters.isEmpty()) {
-						builder.append(" ");
-						if (hasDesc)
-							builder.hover(Collections.singletonList(ChatColor.GRAY + command.getDescription().trim()));
+                      builder.append(ChatColor.RED + ")").reset();
+                      if (hasDesc)
+                          builder.hover(Collections.singletonList(ChatColor.GRAY + command.getDescription().trim()));
+                  }
+              });
 
-						int i = 0;
-						for (BladeParameter.CommandParameter commandParameter : commandParameters) {
-							builder.append(i++ == 0 ? "" : " ");
+        Optional.of(command.getCommandParameters())
+              .ifPresent(commandParameters -> {
+                  if (!commandParameters.isEmpty()) {
+                      builder.append(" ");
+                      if (hasDesc)
+                          builder.hover(Collections.singletonList(ChatColor.GRAY + command.getDescription().trim()));
 
-							builder.append(ChatColor.RED + (commandParameter.isOptional() ? "(" : "<"));
-							builder.append(ChatColor.RED + commandParameter.getName());
-							builder.append(ChatColor.RED + (commandParameter.isOptional() ? ")" : ">"));
-						}
-					}
-				});
+                      int i = 0;
+                      for (BladeParameter.CommandParameter commandParameter : commandParameters) {
+                          builder.append(i++ == 0 ? "" : " ");
 
-		if (command.getExtraUsageData() != null && !command.getExtraUsageData().trim().isEmpty()) {
-			builder.append(" ");
-			builder.append(ChatColor.RED + command.getExtraUsageData());
-			if (hasDesc) builder.hover(Collections.singletonList(ChatColor.GRAY + command.getDescription().trim()));
-		}
+                          builder.append(ChatColor.RED + (commandParameter.isOptional() ? "(" : "<"));
+                          builder.append(ChatColor.RED + commandParameter.getName());
+                          builder.append(ChatColor.RED + (commandParameter.isOptional() ? ")" : ">"));
+                      }
+                  }
+              });
 
-		builder.sendTo(sender);
-	}
+        if (command.getExtraUsageData() != null && !command.getExtraUsageData().trim().isEmpty()) {
+            builder.append(" ");
+            builder.append(ChatColor.RED + command.getExtraUsageData());
+            if (hasDesc) builder.hover(Collections.singletonList(ChatColor.GRAY + command.getDescription().trim()));
+        }
 
-	private boolean hasPermission(@NotNull CommandSender sender, String[] args) throws BladeExitMessage {
-		Tuple<BladeCommand, String> command = resolveCommand(joinAliasToArgs(this.parentCommand.getAliases()[0], args));
-		return checkPermission(sender, command == null ? null : command.getLeft()).getLeft();
-	}
+        builder.sendTo(sender);
+    }
 
-	private Tuple<Boolean, String> checkPermission(@NotNull CommandSender sender, @Nullable BladeCommand command) throws BladeExitMessage {
-		if (command == null)
-			return new Tuple<>(false, "This command failed to execute as we couldn't find its registration.");
-		if ("op".equals(command.getPermission())) return new Tuple<>(sender.isOp(), command.getPermissionMessage());
-		if (command.getPermission() == null || command.getPermission().trim().isEmpty())
-			return new Tuple<>(true, command.getPermissionMessage());
-		return new Tuple<>(sender.hasPermission(command.getPermission()), command.getPermissionMessage());
-	}
+    private boolean hasPermission(@NotNull CommandSender sender, String[] args) throws BladeExitMessage {
+        Tuple<BladeCommand, String> command = resolveCommand(joinAliasToArgs(this.parentCommand.getAliases()[0], args));
+        BladeContext context = new BladeContext(commandService, new BukkitSender(sender), command == null ? "" : command.getRight(), args);
+        return checkPermission(context, command == null ? null : command.getLeft()).getLeft();
+    }
 
-	private String[] joinAliasToArgs(String alias, String[] args) {
-		String[] aliasParts = alias.split(" ");
-		String[] argsWithAlias = new String[args.length + aliasParts.length];
-		System.arraycopy(aliasParts, 0, argsWithAlias, 0, aliasParts.length);
-		System.arraycopy(args, 0, argsWithAlias, aliasParts.length, args.length);
-		return argsWithAlias;
-	}
+    private Tuple<Boolean, String> checkPermission(@NotNull BladeContext context, @Nullable BladeCommand command) throws BladeExitMessage {
+        if (command == null)
+            return new Tuple<>(false, "This command failed to execute as we couldn't find its registration.");
 
-	@Override
-	public boolean testPermissionSilent(@NotNull CommandSender sender) {
-		return hasPermission(sender, new String[0]);
-	}
+        return new Tuple<>(
+              commandService.getPermissionTester().testPermission(context, command),
+              command.getPermissionMessage());
+    }
 
-	@Override
-	public boolean execute(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
-		BladeCommand command = null;
-		String resolvedAlias = alias;
+    private String[] joinAliasToArgs(String alias, String[] args) {
+        String[] aliasParts = alias.split(" ");
+        String[] argsWithAlias = new String[args.length + aliasParts.length];
+        System.arraycopy(aliasParts, 0, argsWithAlias, 0, aliasParts.length);
+        System.arraycopy(args, 0, argsWithAlias, aliasParts.length, args.length);
+        return argsWithAlias;
+    }
 
-		try {
-			String[] joined = joinAliasToArgs(alias, args);
+    @Override
+    public boolean testPermissionSilent(@NotNull CommandSender sender) {
+        return hasPermission(sender, new String[0]);
+    }
 
-			BladeContext context = new BladeContext(commandService, new BukkitSender(sender), alias, args);
+    @Override
+    public boolean execute(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
+        BladeCommand command = null;
+        String resolvedAlias = alias;
 
-			Tuple<BladeCommand, String> resolved = resolveCommand(joined);
-			if (resolved == null) {
-				List<BladeCommand> availableCommands = commandService.getAllBladeCommands()
-						.stream().filter(c -> Arrays.stream(c.getAliases()).anyMatch(a -> a.toLowerCase().startsWith(alias.toLowerCase(Locale.ROOT) + " ") || a.equalsIgnoreCase(alias)))
-						.filter(c -> this.checkPermission(sender, c).getLeft())
-						.collect(Collectors.toList());
+        try {
+            String[] joined = joinAliasToArgs(alias, args);
 
-				for (String line : commandService.getHelpGenerator().generate(context, availableCommands)) {
-					sender.sendMessage(line);
-				}
+            BladeContext context = new BladeContext(commandService, new BukkitSender(sender), alias, args);
 
-				return true;
-			}
+            Tuple<BladeCommand, String> resolved = resolveCommand(joined);
+            if (resolved == null) {
+                List<BladeCommand> availableCommands = commandService.getAllBladeCommands()
+                      .stream().filter(c -> Arrays.stream(c.getAliases()).anyMatch(a -> a.toLowerCase().startsWith(alias.toLowerCase(Locale.ROOT) + " ") || a.equalsIgnoreCase(alias)))
+                      .filter(c -> this.checkPermission(context, c).getLeft())
+                      .collect(Collectors.toList());
 
-			Tuple<Boolean, String> permissionResult = checkPermission(sender, resolved.getLeft());
-			if (!permissionResult.getLeft()) throw new BladeExitMessage(permissionResult.getRight());
+                for (String line : commandService.getHelpGenerator().generate(context, availableCommands)) {
+                    sender.sendMessage(line);
+                }
 
-			command = resolved.getLeft();
-			resolvedAlias = resolved.getRight();
-			int offset = Math.min(args.length, resolvedAlias.split(" ").length - 1);
+                return true;
+            }
 
-			if (command.isSenderParameter() && !command.getSenderType().isInstance(sender))
-				throw new BladeExitMessage("This command can only be executed by " + getSenderType(command.getSenderType()) + ".");
+            Tuple<Boolean, String> permissionResult = checkPermission(context, resolved.getLeft());
+            if (!permissionResult.getLeft()) throw new BladeExitMessage(permissionResult.getRight());
 
-			final BladeCommand finalCommand = command;
-			final String finalResolvedAlias = resolvedAlias;
+            command = resolved.getLeft();
+            resolvedAlias = resolved.getRight();
+            int offset = Math.min(args.length, resolvedAlias.split(" ").length - 1);
 
-			Runnable runnable = () -> {
-				try {
-					List<Object> parsed;
-					if (finalCommand.isContextBased()) {
-						parsed = Collections.singletonList(context);
-					} else {
-						parsed = commandService.getCommandParser().parseArguments(finalCommand, context, Arrays.copyOfRange(args, offset, args.length));
-						if (finalCommand.isSenderParameter()) parsed.add(0, sender);
-					}
+            if (command.isSenderParameter() && !command.getSenderType().isInstance(sender))
+                throw new BladeExitMessage("This command can only be executed by " + getSenderType(command.getSenderType()) + ".");
 
-					finalCommand.getMethod().setAccessible(true);
-					finalCommand.getMethod().invoke(finalCommand.getInstance(), parsed.toArray(new Object[0]));
-				} catch (BladeUsageMessage ex) {
-					sendUsageMessage(sender, finalResolvedAlias, finalCommand);
-				} catch (BladeExitMessage ex) {
-					sender.sendMessage(ChatColor.RED + ex.getMessage());
-				} catch (InvocationTargetException ex) {
-					if (ex.getTargetException() != null) {
-						if (ex.getTargetException() instanceof BladeUsageMessage) {
-							sendUsageMessage(sender, finalResolvedAlias, finalCommand);
-							return;
-						} else if (ex.getTargetException() instanceof BladeExitMessage) {
-							sender.sendMessage(ChatColor.RED + ex.getTargetException().getMessage());
-							return;
-						}
-					}
+            final BladeCommand finalCommand = command;
+            final String finalResolvedAlias = resolvedAlias;
 
-					ex.printStackTrace();
-					sender.sendMessage(ChatColor.RED + "An exception was thrown while executing this command.");
-				} catch (Throwable t) {
-					t.printStackTrace();
-					sender.sendMessage(ChatColor.RED + "An exception was thrown while executing this command.");
-				}
-			};
+            Runnable runnable = () -> {
+                try {
+                    List<Object> parsed;
+                    if (finalCommand.isContextBased()) {
+                        parsed = Collections.singletonList(context);
+                    } else {
+                        parsed = commandService.getCommandParser().parseArguments(finalCommand, context, Arrays.copyOfRange(args, offset, args.length));
+                        if (finalCommand.isSenderParameter()) parsed.add(0, sender);
+                    }
 
-			if (command.isAsync()) {
-				commandService.getAsyncExecutor().accept(runnable);
-			} else {
-				long time = System.nanoTime();
-				runnable.run();
-				long elapsed = (System.nanoTime() - time) / 1000000;
+                    finalCommand.getMethod().setAccessible(true);
+                    finalCommand.getMethod().invoke(finalCommand.getInstance(), parsed.toArray(new Object[0]));
+                } catch (BladeUsageMessage ex) {
+                    sendUsageMessage(sender, finalResolvedAlias, finalCommand);
+                } catch (BladeExitMessage ex) {
+                    sender.sendMessage(ChatColor.RED + ex.getMessage());
+                } catch (InvocationTargetException ex) {
+                    if (ex.getTargetException() != null) {
+                        if (ex.getTargetException() instanceof BladeUsageMessage) {
+                            sendUsageMessage(sender, finalResolvedAlias, finalCommand);
+                            return;
+                        } else if (ex.getTargetException() instanceof BladeExitMessage) {
+                            sender.sendMessage(ChatColor.RED + ex.getTargetException().getMessage());
+                            return;
+                        }
+                    }
 
-				if (elapsed >= commandService.getExecutionTimeWarningThreshold()) {
-					Bukkit.getLogger().warning(String.format(
-							"[Blade] Command '%s' (%s#%s) took %d milliseconds to execute!",
-							finalResolvedAlias,
-							finalCommand.getMethod().getDeclaringClass().getName(),
-							finalCommand.getMethod().getName(),
-							elapsed
-					));
-				}
-			}
+                    ex.printStackTrace();
+                    sender.sendMessage(ChatColor.RED + "An exception was thrown while executing this command.");
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                    sender.sendMessage(ChatColor.RED + "An exception was thrown while executing this command.");
+                }
+            };
 
-			return true;
-		} catch (BladeUsageMessage ex) {
-			sendUsageMessage(sender, resolvedAlias, command);
-		} catch (BladeExitMessage ex) {
-			sender.sendMessage(ChatColor.RED + ex.getMessage());
-		} catch (Throwable t) {
-			t.printStackTrace();
-			sender.sendMessage(ChatColor.RED + "An exception was thrown while executing this command.");
-		}
+            if (command.isAsync()) {
+                commandService.getAsyncExecutor().accept(runnable);
+            } else {
+                long time = System.nanoTime();
+                runnable.run();
+                long elapsed = (System.nanoTime() - time) / 1000000;
 
-		return false;
-	}
+                if (elapsed >= commandService.getExecutionTimeWarningThreshold()) {
+                    Bukkit.getLogger().warning(String.format(
+                          "[Blade] Command '%s' (%s#%s) took %d milliseconds to execute!",
+                          finalResolvedAlias,
+                          finalCommand.getMethod().getDeclaringClass().getName(),
+                          finalCommand.getMethod().getName(),
+                          elapsed
+                    ));
+                }
+            }
 
-	@NotNull
-	@Override
-	public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
-		if (!commandService.getTabCompleter().isDefault()) return Collections.emptyList();
-		if (!hasPermission(sender, args)) return Collections.emptyList();
+            return true;
+        } catch (BladeUsageMessage ex) {
+            sendUsageMessage(sender, resolvedAlias, command);
+        } catch (BladeExitMessage ex) {
+            sender.sendMessage(ChatColor.RED + ex.getMessage());
+        } catch (Throwable t) {
+            t.printStackTrace();
+            sender.sendMessage(ChatColor.RED + "An exception was thrown while executing this command.");
+        }
 
-		try {
-			Tuple<BladeCommand, String> resolved = resolveCommand(joinAliasToArgs(alias, args));
-			if (resolved == null) {
-				// maybe suggest subcommands?
-				return Collections.emptyList();
-			}
+        return false;
+    }
 
-			BladeCommand command = resolved.getLeft();
-			String foundAlias = resolved.getRight();
+    @NotNull
+    @Override
+    public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
+        if (!commandService.getTabCompleter().isDefault()) return Collections.emptyList();
+        if (!hasPermission(sender, args)) return Collections.emptyList();
 
-			List<String> argList = new ArrayList<>(Arrays.asList(args));
-			if (foundAlias.split(" ").length > 1) argList.subList(0, foundAlias.split(" ").length - 1).clear();
+        try {
+            Tuple<BladeCommand, String> resolved = resolveCommand(joinAliasToArgs(alias, args));
+            if (resolved == null) {
+                // maybe suggest subcommands?
+                return Collections.emptyList();
+            }
 
-			if (argList.isEmpty()) argList.add("");
-			String[] actualArguments = argList.toArray(new String[0]);
+            BladeCommand command = resolved.getLeft();
+            String foundAlias = resolved.getRight();
 
-			BladeContext context = new BladeContext(commandService, new BukkitSender(sender), foundAlias, actualArguments);
-			return commandService.getCommandCompleter().suggest(context, command, actualArguments);
-		} catch (BladeExitMessage ex) {
-			sender.sendMessage(ChatColor.RED + ex.getMessage());
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			sender.sendMessage(ChatColor.RED + "An exception was thrown while completing this command.");
-		}
+            List<String> argList = new ArrayList<>(Arrays.asList(args));
+            if (foundAlias.split(" ").length > 1) argList.subList(0, foundAlias.split(" ").length - 1).clear();
 
-		return Collections.emptyList();
-	}
+            if (argList.isEmpty()) argList.add("");
+            String[] actualArguments = argList.toArray(new String[0]);
+
+            BladeContext context = new BladeContext(commandService, new BukkitSender(sender), foundAlias, actualArguments);
+            return commandService.getCommandCompleter().suggest(context, command, actualArguments);
+        } catch (BladeExitMessage ex) {
+            sender.sendMessage(ChatColor.RED + ex.getMessage());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            sender.sendMessage(ChatColor.RED + "An exception was thrown while completing this command.");
+        }
+
+        return Collections.emptyList();
+    }
 }

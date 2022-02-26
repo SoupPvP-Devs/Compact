@@ -1,5 +1,4 @@
 package me.ninetyeightping.compact.general.punishments.commands;
-
 import me.ninetyeightping.compact.CompactAPI;
 import me.ninetyeightping.compact.controller.impl.grants.impl.Punishment;
 import me.ninetyeightping.compact.controller.impl.grants.impl.PunishmentController;
@@ -14,11 +13,12 @@ import java.util.UUID;
 
 public class ForeverPunishmentCommands {
 
-    @Command(name = "warn")
+
+    @Command(value = "warn")
     @Permission(value = "compact.warn")
-    public void warn(@Sender CommandSender sender, @Param("target")Profile target, @Flag(value = 's', description = "Silently warns the player") boolean silent, @Param("reason") @Combined String reason) {
+    public void warn(@Sender CommandSender sender, @Name("target")Profile target, @Flag(value = 's', description = "Silently warns the player") boolean silent, @Name("reason") @Combined String reason) {
 
-        Punishment punishment = new Punishment(UUID.randomUUID(), UUID.fromString(target.getUuid()), (sender instanceof Player ? ((Player) sender).getUniqueId() : CompactAPI.getConsoleUUID()), reason, Long.MAX_VALUE, PunishmentType.WARN);
+        Punishment punishment = new Punishment(UUID.randomUUID(), UUID.fromString(target.getUuid()), (sender instanceof Player ? ((Player) sender).getUniqueId() : CompactAPI.INSTANCE.getConsoleUUID()), reason, Long.MAX_VALUE, PunishmentType.WARN);
 
         InjectionUtil.get(PunishmentController.class).dispatch(punishment, silent);
 
@@ -28,32 +28,32 @@ public class ForeverPunishmentCommands {
     }
 
 
-    @Command(name = "mute")
+    @Command(value = "mute")
     @Permission(value = "compact.mute")
-    public void mute(@Sender CommandSender sender, @Param("target")Profile target, @Flag(value = 's', description = "Silently mute the player") boolean silent, @Param("reason") @Combined String reason) {
+    public void mute(@Sender CommandSender sender, @Name("target")Profile target, @Flag(value = 's', description = "Silently mute the player") boolean silent, @Name("reason") @Combined String reason) {
 
-        Punishment punishment = new Punishment(UUID.randomUUID(), UUID.fromString(target.getUuid()), (sender instanceof Player ? ((Player) sender).getUniqueId() : CompactAPI.getConsoleUUID()), reason, Long.MAX_VALUE, PunishmentType.MUTE);
+        Punishment punishment = new Punishment(UUID.randomUUID(), UUID.fromString(target.getUuid()), (sender instanceof Player ? ((Player) sender).getUniqueId() : CompactAPI.INSTANCE.getConsoleUUID()), reason, Long.MAX_VALUE, PunishmentType.MUTE);
 
         InjectionUtil.get(PunishmentController.class).dispatch(punishment, silent);
 
     }
 
 
-    @Command(name = "ban")
+    @Command(value = "ban")
     @Permission(value = "compact.ban")
-    public void ban(@Sender CommandSender sender, @Param("target")Profile target, @Flag(value = 's', description = "Silently ban the player") boolean silent, @Param("reason") @Combined String reason) {
+    public void ban(@Sender CommandSender sender, @Name("target")Profile target, @Flag(value = 's', description = "Silently ban the player") boolean silent, @Name("reason") @Combined String reason) {
 
-        Punishment punishment = new Punishment(UUID.randomUUID(), UUID.fromString(target.getUuid()), (sender instanceof Player ? ((Player) sender).getUniqueId() : CompactAPI.getConsoleUUID()), reason, Long.MAX_VALUE, PunishmentType.BAN);
+        Punishment punishment = new Punishment(UUID.randomUUID(), UUID.fromString(target.getUuid()), (sender instanceof Player ? ((Player) sender).getUniqueId() : CompactAPI.INSTANCE.getConsoleUUID()), reason, Long.MAX_VALUE, PunishmentType.BAN);
 
         InjectionUtil.get(PunishmentController.class).dispatch(punishment, silent);
 
     }
 
-    @Command(name = "blacklist")
+    @Command(value = "blacklist")
     @Permission(value = "compact.blacklist")
-    public void blacklist(@Sender CommandSender sender, @Param("target")Profile target, @Flag(value = 's', description = "Silently blacklist the player") boolean silent, @Param("reason") @Combined String reason) {
+    public void blacklist(@Sender CommandSender sender, @Name("target")Profile target, @Flag(value = 's', description = "Silently blacklist the player") boolean silent, @Name("reason") @Combined String reason) {
 
-        Punishment punishment = new Punishment(UUID.randomUUID(), UUID.fromString(target.getUuid()), (sender instanceof Player ? ((Player) sender).getUniqueId() : CompactAPI.getConsoleUUID()), reason, Long.MAX_VALUE, PunishmentType.BLACKLIST);
+        Punishment punishment = new Punishment(UUID.randomUUID(), UUID.fromString(target.getUuid()), (sender instanceof Player ? ((Player) sender).getUniqueId() : CompactAPI.INSTANCE.getConsoleUUID()), reason, Long.MAX_VALUE, PunishmentType.BLACKLIST);
 
         InjectionUtil.get(PunishmentController.class).dispatch(punishment, silent);
 

@@ -1,5 +1,6 @@
 package me.ninetyeightping.compact.general.staff;
 
+
 import me.ninetyeightping.compact.CompactAPI;
 import me.ninetyeightping.compact.models.impl.Profile;
 import me.ninetyeightping.compact.redis.backend.PacketHandler;
@@ -13,11 +14,11 @@ public class StaffJoinAndLeaveMessageListener implements Listener {
     @EventHandler
     public void join(PlayerJoinEvent event) {
 
-        Profile profile = CompactAPI.getProfile(event.getPlayer().getUniqueId());
+        Profile profile = CompactAPI.INSTANCE.getProfile(event.getPlayer().getUniqueId());
 
         if (profile.getHighestRank().isStaff()) {
 
-            PacketHandler.sendToAll(new GlobalStaffMessagePacket("&9&l[Network] &r" + CompactAPI.getColoredDisplay(event.getPlayer().getUniqueId()) + " &bhas &ajoined &bthe network"));
+            PacketHandler.sendToAll(new GlobalStaffMessagePacket("&9&l[Network] &r" + CompactAPI.INSTANCE.getColoredDisplay(event.getPlayer().getUniqueId()) + " &bhas &ajoined &bthe network"));
         }
     }
 }

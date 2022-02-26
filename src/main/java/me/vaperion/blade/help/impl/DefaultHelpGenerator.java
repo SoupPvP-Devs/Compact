@@ -1,6 +1,5 @@
 package me.vaperion.blade.help.impl;
 
-import me.ninetyeightping.compact.util.Chat;
 import me.vaperion.blade.command.BladeCommand;
 import me.vaperion.blade.context.BladeContext;
 import me.vaperion.blade.help.HelpGenerator;
@@ -30,14 +29,12 @@ public class DefaultHelpGenerator implements HelpGenerator {
 
         lines.add(LINE);
 
-        int i = 1;
         for (BladeCommand command : commands) {
             String cmd = Arrays.stream(command.getAliases())
                   .filter(a -> a.toLowerCase(Locale.ROOT).startsWith(context.alias().toLowerCase(Locale.ROOT)))
                   .findFirst().orElse(null);
             if (cmd == null) continue;
-            lines.add(Chat.format("&6" + i + ") &7/" + cmd + " - " + command.getExtraUsageData() + " (" + command.getDescription() + ")"));
-            ++i;
+            lines.add(ChatColor.AQUA + "/" + cmd);
         }
 
         lines.add(LINE);

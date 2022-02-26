@@ -1,5 +1,4 @@
 package me.ninetyeightping.compact.general.punishments.listeners;
-
 import me.ninetyeightping.compact.CompactAPI;
 import me.ninetyeightping.compact.controller.impl.grants.impl.Punishment;
 import me.ninetyeightping.compact.models.impl.Profile;
@@ -15,7 +14,7 @@ public class PunishmentJoinListener implements Listener {
     @EventHandler
     public void tryToJoinWhileBlacklist(AsyncPlayerPreLoginEvent event) {
 
-        Profile profile = CompactAPI.getProfile(event.getUniqueId());
+        Profile profile = CompactAPI.INSTANCE.getProfile(event.getUniqueId());
 
         if (profile == null) return;
 
@@ -35,7 +34,7 @@ public class PunishmentJoinListener implements Listener {
     @EventHandler
     public void tryToJoinWhileBanned(AsyncPlayerPreLoginEvent event) {
 
-        Profile profile = CompactAPI.getProfile(event.getUniqueId());
+        Profile profile = CompactAPI.INSTANCE.getProfile(event.getUniqueId());
 
         if (profile == null) return;
 

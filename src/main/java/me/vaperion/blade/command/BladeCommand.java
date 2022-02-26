@@ -1,18 +1,16 @@
 package me.vaperion.blade.command;
 
 import lombok.Getter;
-import me.ninetyeightping.compact.util.Chat;
 import me.vaperion.blade.annotation.*;
 import me.vaperion.blade.argument.BladeProvider;
 import me.vaperion.blade.context.BladeContext;
 import me.vaperion.blade.service.BladeCommandService;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,8 +46,8 @@ public class BladeCommand {
         this.async = command.async();
         this.quoted = command.quoted();
 
-        this.permission = permission == null ? "" : permission.value();
-        this.permissionMessage = Chat.format("&cNo permission.");
+        this.permission = permission == null ? "" : permission.value().trim();
+        this.permissionMessage = permission == null ? "" : "".equals(permission.message()) ? commandService.getDefaultPermissionMessage() : permission.message();
 
         this.contextBased = method != null && method.getParameterCount() == 1 && method.getParameterTypes()[0] == BladeContext.class;
 
@@ -64,15 +62,17 @@ public class BladeCommand {
                     continue;
                 }
 
-                String parameterName = parameter.isAnnotationPresent(Param.class) ? parameter.getAnnotation(Param.class).value() : parameter.getName();
+                String parameterName = parameter.isAnnotationPresent(Name.class) ? parameter.getAnnotation(Name.class).value() : parameter.getName();
+                String[] parameterData = parameter.isAnnotationPresent(Data.class) ? parameter.getAnnotation(Data.class).value() : null;
                 BladeParameter bladeParameter;
 
                 if (parameter.isAnnotationPresent(Flag.class)) {
                     Flag flag = parameter.getAnnotation(Flag.class);
-                    bladeParameter = new BladeParameter.FlagParameter(parameterName, parameter.getType(), parameter.getAnnotation(Optional.class), flag);
+                    bladeParameter = new BladeParameter.FlagParameter(parameterName, parameter.getType(), parameter.getAnnotation(Optional.class), parameter, flag);
                 } else {
-                    bladeParameter = new BladeParameter.CommandParameter(parameterName, parameter.getType(), parameter.getAnnotation(Optional.class),
-                          parameter.getAnnotation(Range.class), parameter.getAnnotation(Completer.class), parameter.isAnnotationPresent(Combined.class));
+                    bladeParameter = new BladeParameter.CommandParameter(parameterName, parameter.getType(),
+                          parameterData == null ? Collections.emptyList() : Arrays.asList(parameterData), parameter.getAnnotation(Optional.class),
+                          parameter.getAnnotation(Range.class), parameter.getAnnotation(Completer.class), parameter, parameter.isAnnotationPresent(Combined.class));
                 }
 
                 BladeProvider<?> provider = commandService.getCommandResolver().resolveProvider(parameter.getType(), Arrays.asList(parameter.getAnnotations()));
@@ -86,42 +86,6 @@ public class BladeCommand {
                     parameterProviders.add(provider);
 
                 i++;
-            }
-        }
-    }
-
-    public boolean canUse(CommandSender sender) {
-        if (this.permission == null) {
-            return true;
-        } else {
-            String var2 = this.permission;
-            byte var3 = -1;
-            switch(var2.hashCode()) {
-                case 0:
-                    if (var2.equals("")) {
-                        var3 = 2;
-                    }
-                    break;
-                case 3553:
-                    if (var2.equals("op")) {
-                        var3 = 1;
-                    }
-                    break;
-                case 951510359:
-                    if (var2.equals("console")) {
-                        var3 = 0;
-                    }
-            }
-
-            switch(var3) {
-                case 0:
-                    return sender instanceof ConsoleCommandSender;
-                case 1:
-                    return sender.isOp();
-                case 2:
-                    return true;
-                default:
-                    return sender.hasPermission(this.permission);
             }
         }
     }

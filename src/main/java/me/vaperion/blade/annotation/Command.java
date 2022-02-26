@@ -12,7 +12,7 @@ public @interface Command {
      * The names you can use to execute this command.
      * <p>Example: <code>{"a", "b"}</code> => <code>/a</code>; <code>/b</code>
      */
-    String[] name();
+    String[] value();
 
     /**
      * This method indicates whether this command should be executed asynchronously or not.
