@@ -7,6 +7,7 @@ me\vaperion\blade\command\BladeParameter.class
 me\ninetyeightping\compact\controller\Controller.class
 me\vaperion\blade\exception\BladeUsageMessage.class
 me\vaperion\blade\utils\Tuple.class
+me\ninetyeightping\compact\general\staff\commands\StaffChatCommand.class
 me\vaperion\blade\context\BladeContext.class
 me\vaperion\blade\service\BladePermissionTester.class
 me\vaperion\blade\Blade$2.class
