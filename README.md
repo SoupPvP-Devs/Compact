@@ -18,7 +18,7 @@ Purely just install the project with maven or however you package your jars
 
 👤 **98ping**
 
-Special thanks to, **NV6**, **LBuddyBoy**, **vaperion**, and **Frozenorb Games**
+Special thanks to, **NV6**, **LBuddyBoy**, **vaperion**, **Frozenorb Games**, and **GrowlyX**
 
 ## Contributing
 
