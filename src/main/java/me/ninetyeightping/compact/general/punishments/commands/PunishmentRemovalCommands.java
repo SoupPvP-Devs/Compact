@@ -6,7 +6,10 @@ import me.ninetyeightping.compact.controller.impl.grants.impl.PunishmentControll
 import me.ninetyeightping.compact.general.punishments.PunishmentType;
 import me.ninetyeightping.compact.injection.InjectionUtil;
 import me.ninetyeightping.compact.models.impl.Profile;
+import me.ninetyeightping.compact.redis.backend.PacketHandler;
+import me.ninetyeightping.compact.redis.frontend.impl.GlobalStaffMessagePacket;
 import me.ninetyeightping.compact.util.Chat;
+import me.ninetyeightping.compact.util.TimeUtil;
 import me.vaperion.blade.annotation.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -25,6 +28,14 @@ public class PunishmentRemovalCommands {
             sender.sendMessage(Chat.format("&cNo active punishment by this type"));
             return;
         }
+
+        punishment.setRemovedAt(System.currentTimeMillis());
+        punishment.setRemovedReason(reason);
+        punishment.setRemovedBy((sender instanceof Player) ? ((Player) sender).getUniqueId() : CompactAPI.INSTANCE.getConsoleUUID());
+        punishment.save();
+        PacketHandler.sendToAll(new GlobalStaffMessagePacket((silent ? "&7[Silent] " : "") + (CompactAPI.INSTANCE.getColoredDisplay(punishment.getExecutor()) +
+                " &ahas " + punishment.getGrantable().getRemoved() +  " " + CompactAPI.INSTANCE.getColoredDisplay(punishment.getTarget()) + " &afor &f"
+                + punishment.getReason())));
     }
 
     @Command(value = "unmute")
@@ -34,7 +45,18 @@ public class PunishmentRemovalCommands {
 
         if (punishment == null) {
             sender.sendMessage(Chat.format("&cNo active punishment by this type"));
+            return;
         }
+
+        punishment.setRemovedAt(System.currentTimeMillis());
+        punishment.setRemovedReason(reason);
+        punishment.setRemovedBy((sender instanceof Player) ? ((Player) sender).getUniqueId() : CompactAPI.INSTANCE.getConsoleUUID());
+        punishment.save();
+        PacketHandler.sendToAll(new GlobalStaffMessagePacket((silent ? "&7[Silent] " : "") + (CompactAPI.INSTANCE.getColoredDisplay(punishment.getExecutor()) +
+                " &ahas " + punishment.getGrantable().getRemoved() +  " " + CompactAPI.INSTANCE.getColoredDisplay(punishment.getTarget()) + " &afor &f"
+                + punishment.getReason())));
+
+
 
 
     }
@@ -46,7 +68,16 @@ public class PunishmentRemovalCommands {
 
         if (punishment == null) {
             sender.sendMessage(Chat.format("&cNo active punishment by this type"));
+            return;
         }
+
+        punishment.setRemovedAt(System.currentTimeMillis());
+        punishment.setRemovedReason(reason);
+        punishment.setRemovedBy((sender instanceof Player) ? ((Player) sender).getUniqueId() : CompactAPI.INSTANCE.getConsoleUUID());
+        punishment.save();
+        PacketHandler.sendToAll(new GlobalStaffMessagePacket((silent ? "&7[Silent] " : "") + (CompactAPI.INSTANCE.getColoredDisplay(punishment.getExecutor()) +
+                " &ahas " + punishment.getGrantable().getRemoved() +  " " + CompactAPI.INSTANCE.getColoredDisplay(punishment.getTarget()) + " &afor &f"
+                + punishment.getReason())));
 
 
     }

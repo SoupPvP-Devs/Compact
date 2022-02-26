@@ -3,6 +3,7 @@ package me.ninetyeightping.compact.controller.impl.grants.impl;
 import me.ninetyeightping.compact.Compact;
 import me.ninetyeightping.compact.controller.impl.grants.Grantable;
 import me.ninetyeightping.compact.general.punishments.PunishmentType;
+import me.ninetyeightping.compact.injection.InjectionUtil;
 
 import java.util.UUID;
 
@@ -22,6 +23,10 @@ public class Punishment extends Grantable<PunishmentType> {
 
     public boolean isActive(){
         return removedAt == 0L;
+    }
+
+    public void save() {
+        InjectionUtil.get(PunishmentController.class).save(this);
     }
 
     public long getRemainingTime(){

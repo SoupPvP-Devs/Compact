@@ -32,7 +32,8 @@ public class PunishmentController extends Controller<Punishment> {
 
         refresh();
 
-        Bukkit.getScheduler().runTaskTimer(Compact.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskTimer(Compact.getInstance(), () ->
+        {
             for (Punishment punishment : cache) {
 
                 if (punishment.getRemainingTime() <= 0 && punishment.isActive()) {
@@ -40,6 +41,10 @@ public class PunishmentController extends Controller<Punishment> {
                     punishment.setRemovedReason("Expired");
                     punishment.setRemovedAt(System.currentTimeMillis());
                     punishment.setRemovedBy(CompactAPI.INSTANCE.getConsoleUUID());
+
+
+                    punishment.save();
+                    refresh();
                 }
             }
         }, 0L, 20L);
