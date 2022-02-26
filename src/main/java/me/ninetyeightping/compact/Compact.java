@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.LongSerializationPolicy;
 import io.github.nosequel.menu.MenuHandler;
 import lombok.Getter;
-import me.ninetyeightping.compact.controller.Controller;
 import me.ninetyeightping.compact.controller.impl.NetworkServerController;
 import me.ninetyeightping.compact.controller.impl.ProfileController;
 import me.ninetyeightping.compact.controller.impl.RankController;
@@ -16,7 +15,7 @@ import me.ninetyeightping.compact.general.grant.GrantCommands;
 import me.ninetyeightping.compact.general.heartbeat.MainHeartbeatThread;
 import me.ninetyeightping.compact.general.networkserver.NetworkServerThread;
 import me.ninetyeightping.compact.general.networkserver.commands.EnvironmentCommand;
-import me.ninetyeightping.compact.general.networkserver.commands.StaffChatCommand;
+import me.ninetyeightping.compact.general.staff.commands.StaffChatCommand;
 import me.ninetyeightping.compact.models.impl.NetworkServer;
 import me.ninetyeightping.compact.models.impl.Profile;
 import me.ninetyeightping.compact.general.profile.ProfileListener;
@@ -34,7 +33,6 @@ import me.vaperion.blade.container.impl.BukkitCommandContainer;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 
 public class Compact extends JavaPlugin {

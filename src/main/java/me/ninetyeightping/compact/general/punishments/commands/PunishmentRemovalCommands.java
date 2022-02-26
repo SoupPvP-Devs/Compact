@@ -17,7 +17,7 @@ public class PunishmentRemovalCommands {
 
     @Command(name = "unban")
     @Permission(value = "compact.unban")
-    public void unban(@Sender CommandSender sender, @Param("target") Profile target, @Flag(value = 's', description = "Silently unbans the player") boolean silent, @Param("reason") @Combined String reason) {
+    public void unban(@Sender CommandSender sender, @Name("target") Profile target, @Flag(value = 's', description = "Silently unbans the player") boolean silent, @Name("reason") @Combined String reason) {
 
         Punishment punishment = target.getFirstPunishmentByType(PunishmentType.BAN);
 
@@ -27,9 +27,9 @@ public class PunishmentRemovalCommands {
         }
     }
 
-    @Command(name = "unmute")
+    @Command(value = "unmute")
     @Permission(value = "compact.unmute")
-    public void unMute(@Sender CommandSender sender, @Param("target") Profile target, @Flag(value = 's', description = "Silently unmutes the player") boolean silent, @Param("reason") @Combined String reason) {
+    public void unMute(@Sender CommandSender sender, @Name("target") Profile target, @Flag(value = 's', description = "Silently unmutes the player") boolean silent, @Name("reason") @Combined String reason) {
         Punishment punishment = target.getFirstPunishmentByType(PunishmentType.MUTE);
 
         if (punishment == null) {
@@ -39,9 +39,9 @@ public class PunishmentRemovalCommands {
 
     }
 
-    @Command(name = "unblacklist")
+    @Command(value = "unblacklist")
     @Permission(value = "compact.unblacklist")
-    public void unBlacklist(@Sender CommandSender sender, @Param("target") Profile target, @Flag(value = 's', description = "Silently unblacklists the player") boolean silent, @Param("reason") @Combined String reason) {
+    public void unBlacklist(@Sender CommandSender sender, @Name("target") Profile target, @Flag(value = 's', description = "Silently unblacklists the player") boolean silent, @Name("reason") @Combined String reason) {
         Punishment punishment = target.getFirstPunishmentByType(PunishmentType.BLACKLIST);
 
         if (punishment == null) {
