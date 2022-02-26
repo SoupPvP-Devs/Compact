@@ -11,9 +11,9 @@ import java.util.ArrayList;
 
 public class RankModificationCommands {
 
-    @Command(name = "rank create")
+    @Command(value = "rank create")
     @Permission(value = "rank.admin")
-    public void create(@Sender CommandSender sender, @Param("name")String name) {
+    public void create(@Sender CommandSender sender, @Name("name")String name) {
 
         if (InjectionUtil.get(RankController.class).exists(name)) {
             sender.sendMessage(Chat.format("&cRank already exists"));
@@ -28,9 +28,9 @@ public class RankModificationCommands {
 
 
 
-    @Command(name = "rank data modality")
+    @Command(value = "rank data modality")
     @Permission(value = "rank.admin")
-    public void modality(@Sender CommandSender sender, @Param("rank")String name, @Param("modality")String modality, @Param("arg")@Combined String arg) {
+    public void modality(@Sender CommandSender sender, @Name("rank")String name, @Name("modality")String modality, @Name("arg")@Combined String arg) {
 
         if (!InjectionUtil.get(RankController.class).exists(name)) {
             sender.sendMessage(Chat.format("&cRank doesn't exists"));

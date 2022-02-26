@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 
 public class EnvironmentCommand {
 
-    @Command(name = {"env", "environment"})
+    @Command(value = {"env", "environment"})
     public void env(@Sender CommandSender sender)
     {
         sender.sendMessage(Chat.format("&6&lCompact &7(Environment Check)"));

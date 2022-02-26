@@ -19,21 +19,21 @@ import java.util.UUID;
 
 public class GrantCommands {
 
-    @Command(name = "grant")
+    @Command(value = "grant")
     @Permission(value = "grants.admin")
-    public void grant(@Sender Player player, @Param("target")Profile target) {
+    public void grant(@Sender Player player, @Name("target")Profile target) {
         new GrantMenu(player, target).updateMenu();
     }
 
-    @Command(name = "grants")
+    @Command(value = "grants")
     @Permission(value = "grants.admin")
-    public void grants(@Sender Player player, @Param("target")Profile target) {
+    public void grants(@Sender Player player, @Name("target")Profile target) {
         new GrantsMenu(player, target).updateMenu();
     }
 
-    @Command(name = "ogrant")
+    @Command(value = "ogrant")
     @Permission(value = "grants.admin")
-    public void ogrant(@Sender CommandSender player, @Param("target")Profile target, @Param("rank")String rank, @Param("duration")String duration, @Param("reason")@Combined String reason) {
+    public void ogrant(@Sender CommandSender player, @Name("target")Profile target, @Name("rank")String rank, @Name("duration")String duration, @Name("reason")@Combined String reason) {
         Rank grantrank = InjectionUtil.get(RankController.class).getById(rank);
 
         if (grantrank == null) {
