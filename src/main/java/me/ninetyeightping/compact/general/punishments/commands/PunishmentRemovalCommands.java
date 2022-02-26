@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class PunishmentRemovalCommands {
 
-    @Command(name = "unban")
+    @Command(value = "unban")
     @Permission(value = "compact.unban")
     public void unban(@Sender CommandSender sender, @Name("target") Profile target, @Flag(value = 's', description = "Silently unbans the player") boolean silent, @Name("reason") @Combined String reason) {
 
