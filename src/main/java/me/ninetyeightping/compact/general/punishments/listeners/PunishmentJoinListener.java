@@ -22,7 +22,7 @@ public class PunishmentJoinListener implements Listener {
 
             Punishment punishment = profile.getFirstPunishmentByType(PunishmentType.BLACKLIST);
 
-            if (punishment.getRemainingTime() > 0 ) {
+            if (punishment.isActive()) {
                 event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
                 event.setKickMessage(Chat.format("&cYou are currently blacklisted\n&cExpires In: " + (punishment.getDuration() == Long.MAX_VALUE ? "Never" : TimeUtil.formatDuration(punishment.getRemainingTime()))));
 
@@ -44,10 +44,11 @@ public class PunishmentJoinListener implements Listener {
 
             Punishment punishment = profile.getFirstPunishmentByType(PunishmentType.BAN);
 
-            if (punishment.getRemainingTime() > 0 ) {
+            if (punishment.isActive()) {
+                System.out.println(punishment.getRemainingTime());
+                System.out.println(punishment.isActive());
                 event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
                 event.setKickMessage(Chat.format("&cYou are currently banned\n&cExpires In: " + (punishment.getDuration() == Long.MAX_VALUE ? "Never" : TimeUtil.formatDuration(punishment.getRemainingTime()))));
-                return;
             }
 
 

@@ -15,6 +15,7 @@ import me.ninetyeightping.compact.general.grant.GrantCommands;
 import me.ninetyeightping.compact.general.heartbeat.MainHeartbeatThread;
 import me.ninetyeightping.compact.general.networkserver.NetworkServerThread;
 import me.ninetyeightping.compact.general.networkserver.commands.EnvironmentCommand;
+import me.ninetyeightping.compact.general.punishments.commands.PunishmentRemovalCommands;
 import me.ninetyeightping.compact.general.staff.commands.StaffChatCommand;
 import me.ninetyeightping.compact.models.impl.NetworkServer;
 import me.ninetyeightping.compact.models.impl.Profile;
@@ -105,6 +106,7 @@ public class Compact extends JavaPlugin {
                 .register(new ForeverPunishmentCommands())
                 .register(new PunishmentMenuCommands())
                 .register(new TemporaryPunishmentCommands())
+                .register(new PunishmentRemovalCommands())
                 .register(new StaffChatCommand())
                 .register(new EnvironmentCommand());
 

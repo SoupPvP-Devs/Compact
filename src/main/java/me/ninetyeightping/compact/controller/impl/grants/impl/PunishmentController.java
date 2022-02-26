@@ -32,22 +32,7 @@ public class PunishmentController extends Controller<Punishment> {
 
         refresh();
 
-        Bukkit.getScheduler().runTaskTimer(Compact.getInstance(), () ->
-        {
-            for (Punishment punishment : cache) {
 
-                if (punishment.getRemainingTime() <= 0 && punishment.isActive()) {
-
-                    punishment.setRemovedReason("Expired");
-                    punishment.setRemovedAt(System.currentTimeMillis());
-                    punishment.setRemovedBy(CompactAPI.INSTANCE.getConsoleUUID());
-
-
-                    punishment.save();
-                    refresh();
-                }
-            }
-        }, 0L, 20L);
     }
     public void dispatch(Punishment punishment, boolean silent) {
         save(punishment);
@@ -76,6 +61,22 @@ public class PunishmentController extends Controller<Punishment> {
     @Override
     public void refresh() {
         cache = mongoCollection.find().into(new ArrayList<>()).stream().map(document -> Compact.getGson().fromJson(document.toJson(), Punishment.class)).collect(Collectors.toList());
+
+        for (Punishment punishment : cache)
+        {
+
+            if (punishment.getRemainingTime() <= 0 && punishment.isActive())
+            {
+
+                punishment.setRemovedReason("Expired");
+                punishment.setRemovedAt(System.currentTimeMillis());
+                punishment.setRemovedBy(CompactAPI.INSTANCE.getConsoleUUID());
+
+
+                punishment.save();
+                refresh();
+            }
+        }
     }
 
     //dont neeeeeeed
