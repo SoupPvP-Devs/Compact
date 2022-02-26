@@ -1,6 +1,6 @@
 <h1 align="center">Welcome to Compact Rank Core 👋</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.43-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-${git.commit.id.abbrev}-blue.svg?cacheSeconds=2592000" />
   <a href="https://github.com/kefranabg/readme-md-generator#readme" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
