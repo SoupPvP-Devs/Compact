@@ -17,7 +17,7 @@ public class PunishmentRemovalCommands {
 
     @Command(name = "unban")
     @Permission(value = "compact.unban")
-    public void unban(@Sender CommandSender sender, @Param("target") Profile target, @Flag(value = 's', description = "Silently unbans  the player") boolean silent, @Param("reason") @Combined String reason) {
+    public void unban(@Sender CommandSender sender, @Param("target") Profile target, @Flag(value = 's', description = "Silently unbans the player") boolean silent, @Param("reason") @Combined String reason) {
 
         Punishment punishment = target.getFirstPunishmentByType(PunishmentType.BAN);
 
@@ -25,8 +25,30 @@ public class PunishmentRemovalCommands {
             sender.sendMessage(Chat.format("&cNo active punishment by this type"));
             return;
         }
+    }
 
+    @Command(name = "unmute")
+    @Permission(value = "compact.unmute")
+    public void unMute(@Sender CommandSender sender, @Param("target") Profile target, @Flag(value = 's', description = "Silently unmutes the player") boolean silent, @Param("reason") @Combined String reason) {
+        Punishment punishment = target.getFirstPunishmentByType(PunishmentType.MUTE);
+
+        if (punishment == null) {
+            sender.sendMessage(Chat.format("&cNo active punishment by this type"));
+        }
 
 
     }
+
+    @Command(name = "unblacklist")
+    @Permission(value = "compact.unblacklist")
+    public void unBlacklist(@Sender CommandSender sender, @Param("target") Profile target, @Flag(value = 's', description = "Silently unblacklists the player") boolean silent, @Param("reason") @Combined String reason) {
+        Punishment punishment = target.getFirstPunishmentByType(PunishmentType.BLACKLIST);
+
+        if (punishment == null) {
+            sender.sendMessage(Chat.format("&cNo active punishment by this type"));
+        }
+
+
+    }
+
 }

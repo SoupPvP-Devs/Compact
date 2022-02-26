@@ -16,6 +16,7 @@ import me.ninetyeightping.compact.general.grant.GrantCommands;
 import me.ninetyeightping.compact.general.heartbeat.MainHeartbeatThread;
 import me.ninetyeightping.compact.general.networkserver.NetworkServerThread;
 import me.ninetyeightping.compact.general.networkserver.commands.EnvironmentCommand;
+import me.ninetyeightping.compact.general.networkserver.commands.StaffChatCommand;
 import me.ninetyeightping.compact.models.impl.NetworkServer;
 import me.ninetyeightping.compact.models.impl.Profile;
 import me.ninetyeightping.compact.general.profile.ProfileListener;
@@ -51,7 +52,6 @@ public class Compact extends JavaPlugin {
     @Getter public NetworkServerController networkServerController;
 
     @Getter public NetworkServer localNetworkServer;
-
 
 
     @Override
@@ -107,6 +107,7 @@ public class Compact extends JavaPlugin {
                 .register(new ForeverPunishmentCommands())
                 .register(new PunishmentMenuCommands())
                 .register(new TemporaryPunishmentCommands())
+                .register(new StaffChatCommand())
                 .register(new EnvironmentCommand());
 
         Bukkit.getLogger().log(Level.FINE, "Commands registered");

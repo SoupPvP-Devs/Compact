@@ -15,12 +15,15 @@ import java.util.UUID;
 public class ForeverPunishmentCommands {
 
     @Command(name = "warn")
-    @Permission(value = "compact.mute")
+    @Permission(value = "compact.warn")
     public void warn(@Sender CommandSender sender, @Param("target")Profile target, @Flag(value = 's', description = "Silently warns the player") boolean silent, @Param("reason") @Combined String reason) {
 
         Punishment punishment = new Punishment(UUID.randomUUID(), UUID.fromString(target.getUuid()), (sender instanceof Player ? ((Player) sender).getUniqueId() : CompactAPI.getConsoleUUID()), reason, Long.MAX_VALUE, PunishmentType.WARN);
 
         InjectionUtil.get(PunishmentController.class).dispatch(punishment, silent);
+
+
+
 
     }
 
