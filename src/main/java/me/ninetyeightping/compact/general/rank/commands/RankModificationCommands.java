@@ -28,7 +28,7 @@ public class RankModificationCommands {
 
 
 
-    @Command(value = "rank data modality")
+    @Command(value = "rank data module")
     @Permission(value = "rank.admin")
     public void modality(@Sender CommandSender sender, @Name("rank")String name, @Name("modality")String modality, @Name("arg")@Combined String arg) {
 
@@ -64,6 +64,7 @@ public class RankModificationCommands {
                 rank.save();
                 sender.sendMessage(Chat.format("&aUpdated internal weight"));
                 break;
+
             case "displayweight":
                 rank.setDisplayWeight(Integer.parseInt(arg));
                 rank.save();
@@ -95,8 +96,6 @@ public class RankModificationCommands {
         sender.sendMessage(Chat.format("   &7- Staff: &f" + rank.isStaff()));
         sender.sendMessage(Chat.format("&7&m-------------------------------"));
 
-        //TODO Add Permissions & Weight
-        //TODO Add rank delete (need to loop throught grants to remove it from that)
     }
 
     }
