@@ -41,7 +41,7 @@ public class GrantCommands {
             return;
         }
 
-        RankGrant rankGrant = new RankGrant(UUID.fromString(target.getUuid()), (player instanceof Player ? ((Player) player).getUniqueId() : CompactAPI.getConsoleUUID()), reason, TimeUtil.parseTime(duration), grantrank);
+        RankGrant rankGrant = new RankGrant(UUID.fromString(target.getUuid()), (player instanceof Player ? ((Player) player).getUniqueId() : CompactAPI.INSTANCE.getConsoleUUID()), reason, TimeUtil.parseTime(duration), grantrank);
 
         InjectionUtil.get(RankGrantController.class).create(rankGrant);
         player.sendMessage(Chat.format("&aGranted " + target.getUsername() + " " + grantrank.getDisplayName()));

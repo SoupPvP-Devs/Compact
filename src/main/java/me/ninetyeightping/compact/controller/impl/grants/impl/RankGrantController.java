@@ -35,7 +35,7 @@ public class RankGrantController extends Controller<RankGrant> {
 
                     rankGrant.setRemovedReason("Expired");
                     rankGrant.setRemovedAt(System.currentTimeMillis());
-                    rankGrant.setRemovedBy(CompactAPI.getConsoleUUID());
+                    rankGrant.setRemovedBy(CompactAPI.INSTANCE.getConsoleUUID());
                 }
             }
         }, 0L, 20L);

@@ -35,6 +35,7 @@ public class NetworkServerController extends Controller<NetworkServer> {
         Document set = new Document("$set", parsed);
 
         collection.updateOne(query, set, new UpdateOptions().upsert(true));
+        refresh();
     }
 
     @Override

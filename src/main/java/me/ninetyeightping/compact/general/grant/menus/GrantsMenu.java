@@ -37,14 +37,14 @@ public class GrantsMenu extends PaginatedMenu {
 
         itemMeta.setDisplayName(Chat.format((rankGrant.isActive() ? "&a" : "&c") + new Date(rankGrant.getAddedAt())));
         addToLore(itemMeta, " ");
-        addToLore(itemMeta, "&eBy: &f" + CompactAPI.getColoredDisplay(rankGrant.getExecutor()));
-        addToLore(itemMeta, "&eTo: &f" + CompactAPI.getColoredDisplay(rankGrant.getTarget()));
+        addToLore(itemMeta, "&eBy: &f" + CompactAPI.INSTANCE.getColoredDisplay(rankGrant.getExecutor()));
+        addToLore(itemMeta, "&eTo: &f" + CompactAPI.INSTANCE.getColoredDisplay(rankGrant.getTarget()));
         addToLore(itemMeta, "&eRank: &f" + rankGrant.getGrantable().getColor() + rankGrant.getGrantable().getDisplayName());
         addToLore(itemMeta, "&eReason: &f" + rankGrant.getReason());
         addToLore(itemMeta, "&eDuration: &f" + (rankGrant.getDuration() == Long.MAX_VALUE ? "Forever" : TimeUtil.formatDuration(rankGrant.getDuration())));
         if (!rankGrant.isActive()) {
             addToLore(itemMeta, "&eRemoved Reason: &f" + rankGrant.getRemovedReason());
-            addToLore(itemMeta, "&eRemoved By: &f" + CompactAPI.getColoredDisplay(rankGrant.getRemovedBy()));
+            addToLore(itemMeta, "&eRemoved By: &f" + CompactAPI.INSTANCE.getColoredDisplay(rankGrant.getRemovedBy()));
         }
         addToLore(itemMeta, " ");
 

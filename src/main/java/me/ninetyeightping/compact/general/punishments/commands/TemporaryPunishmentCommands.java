@@ -19,7 +19,7 @@ public class TemporaryPunishmentCommands {
     @Permission(value = "compact.tempban")
     public void tban(@Sender CommandSender sender, @Param("target") Profile target, @Flag(value = 's', description = "Silently tempban the player") boolean silent, @Param("duration")String timestring, @Param("reason") @Combined String reason) {
 
-        Punishment punishment = new Punishment(UUID.randomUUID(), UUID.fromString(target.getUuid()), (sender instanceof Player ? ((Player) sender).getUniqueId() : CompactAPI.getConsoleUUID()), reason, TimeUtil.parseTime(timestring), PunishmentType.BAN);
+        Punishment punishment = new Punishment(UUID.randomUUID(), UUID.fromString(target.getUuid()), (sender instanceof Player ? ((Player) sender).getUniqueId() : CompactAPI.INSTANCE.getConsoleUUID()), reason, TimeUtil.parseTime(timestring), PunishmentType.BAN);
 
         InjectionUtil.get(PunishmentController.class).dispatch(punishment, silent);
 
@@ -29,7 +29,7 @@ public class TemporaryPunishmentCommands {
     @Permission(value = "compact.tempmute")
     public void tmute(@Sender CommandSender sender, @Param("target") Profile target, @Flag(value = 's', description = "Silently tempmute the player") boolean silent, @Param("duration")String timestring, @Param("reason") @Combined String reason) {
 
-        Punishment punishment = new Punishment(UUID.randomUUID(), UUID.fromString(target.getUuid()), (sender instanceof Player ? ((Player) sender).getUniqueId() : CompactAPI.getConsoleUUID()), reason, TimeUtil.parseTime(timestring), PunishmentType.MUTE);
+        Punishment punishment = new Punishment(UUID.randomUUID(), UUID.fromString(target.getUuid()), (sender instanceof Player ? ((Player) sender).getUniqueId() : CompactAPI.INSTANCE.getConsoleUUID()), reason, TimeUtil.parseTime(timestring), PunishmentType.MUTE);
 
         InjectionUtil.get(PunishmentController.class).dispatch(punishment, silent);
 

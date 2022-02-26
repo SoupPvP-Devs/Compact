@@ -1,6 +1,5 @@
 package me.ninetyeightping.compact.general.punishments.commands;
 
-import me.ninetyeightping.compact.CompactAPI;
 import me.ninetyeightping.compact.controller.impl.grants.impl.Punishment;
 import me.ninetyeightping.compact.controller.impl.grants.impl.PunishmentController;
 import me.ninetyeightping.compact.general.punishments.PunishmentType;

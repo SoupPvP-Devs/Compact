@@ -25,5 +25,6 @@ public class NetworkServer extends Model {
     @Override
     public void save() {
         InjectionUtil.get(NetworkServerController.class).save(this);
+
     }
 }
