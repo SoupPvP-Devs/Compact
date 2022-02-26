@@ -14,7 +14,7 @@ public class StaffChatCommand {
     @Command(value = {"sc", "staffchat"})
     @Permission(value = "compact.staff")
     public void staffChat(@Sender Player sender, @Name("message") @Combined String message) {
-        PacketHandler.sendToAll(new GlobalStaffMessagePacket(Chat.format("&9&l[Network] &7&o(" + Compact.getInstance().getLocalNetworkServer().getDisplayName() + "&7&o) " + CompactAPI.INSTANCE.getProfile(sender.getUniqueId()).getHighestRank().getColor() + sender.getName() + "&7: " + message)));
+        PacketHandler.sendToAll(new GlobalStaffMessagePacket(Chat.format("&9&l[Network] &7&o(" + Compact.getInstance().getLocalNetworkServer().getDisplayName() + "&7&o) " + CompactAPI.INSTANCE.getProfile(sender.getUniqueId()).getHighestRank().getColor() + sender.getName() + "&7: &b" + message)));
 
     }
 }

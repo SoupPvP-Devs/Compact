@@ -12,4 +12,8 @@ public class Chat {
     public static void sendStaffMessage(String str) {
         Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("compact.staff")).forEach(player -> player.sendMessage(Chat.format(str)));
     }
+
+    public static void sendAdminMessage(String msg){
+        Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("compact.admin")).forEach(player -> player.sendMessage(Chat.format(msg)));
+    }
 }

@@ -22,7 +22,9 @@ public enum CompactAPI {
 
     public String getColoredDisplay(UUID uuid) {
         Profile profile = getProfile(uuid);
-        if (profile == null) {
+        if (uuid.equals(getConsoleUUID())){
+            return "&4&lConsole";
+        } else if (profile == null) {
             return "&cNot Found";
         } else return profile.getHighestRank().getColor() + profile.getUsername();
     }

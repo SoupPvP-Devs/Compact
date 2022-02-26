@@ -8,6 +8,7 @@ import me.ninetyeightping.compact.redis.frontend.impl.GlobalStaffMessagePacket;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class StaffJoinAndLeaveMessageListener implements Listener {
 
@@ -18,7 +19,17 @@ public class StaffJoinAndLeaveMessageListener implements Listener {
 
         if (profile.getHighestRank().isStaff()) {
 
-            PacketHandler.sendToAll(new GlobalStaffMessagePacket("&9&l[Network] &r" + CompactAPI.INSTANCE.getColoredDisplay(event.getPlayer().getUniqueId()) + " &bhas &ajoined &bthe network"));
+            PacketHandler.sendToAll(new GlobalStaffMessagePacket("&9&l[Network] &r" + CompactAPI.INSTANCE.getColoredDisplay(event.getPlayer().getUniqueId()) + " &bhas &ajoined &bthe network."));
+        }
+    }
+
+    @EventHandler
+    public void leave(PlayerQuitEvent event){
+        Profile profile = CompactAPI.INSTANCE.getProfile(event.getPlayer().getUniqueId());
+
+        if (profile.getHighestRank().isStaff()){
+            PacketHandler.sendToAll(new GlobalStaffMessagePacket("&9&l[Network] &r" + CompactAPI.INSTANCE.getColoredDisplay(event.getPlayer().getUniqueId()) + " &bhas &cleft &bthe network."));
+
         }
     }
 }

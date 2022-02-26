@@ -16,6 +16,7 @@ import me.ninetyeightping.compact.general.heartbeat.MainHeartbeatThread;
 import me.ninetyeightping.compact.general.networkserver.NetworkServerThread;
 import me.ninetyeightping.compact.general.networkserver.commands.EnvironmentCommand;
 import me.ninetyeightping.compact.general.punishments.commands.PunishmentRemovalCommands;
+import me.ninetyeightping.compact.general.staff.commands.AdminChatCommand;
 import me.ninetyeightping.compact.general.staff.commands.StaffChatCommand;
 import me.ninetyeightping.compact.models.impl.NetworkServer;
 import me.ninetyeightping.compact.models.impl.Profile;
@@ -25,7 +26,7 @@ import me.ninetyeightping.compact.general.punishments.commands.ForeverPunishment
 import me.ninetyeightping.compact.general.punishments.commands.PunishmentMenuCommands;
 import me.ninetyeightping.compact.general.punishments.commands.TemporaryPunishmentCommands;
 import me.ninetyeightping.compact.general.punishments.listeners.PunishmentJoinListener;
-import me.ninetyeightping.compact.general.rank.commands.RankModificationCommands;
+import me.ninetyeightping.compact.general.rank.RankModificationCommands;
 import me.ninetyeightping.compact.redis.backend.PacketHandler;
 import me.ninetyeightping.compact.general.staff.StaffJoinAndLeaveMessageListener;
 import me.vaperion.blade.Blade;
@@ -92,7 +93,7 @@ public class Compact extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new StaffJoinAndLeaveMessageListener(), this);
         Bukkit.getLogger().log(Level.FINE, "Listeners registered");
 
-        System.out.println("e");
+            System.out.println("e");
 
         Bukkit.getScheduler().runTask(this, NetworkServerThread::checkForOfflineServers);
         Bukkit.getScheduler().runTask(this, MainHeartbeatThread::startHeartbeat);
@@ -108,6 +109,7 @@ public class Compact extends JavaPlugin {
                 .register(new TemporaryPunishmentCommands())
                 .register(new PunishmentRemovalCommands())
                 .register(new StaffChatCommand())
+                .register(new AdminChatCommand())
                 .register(new EnvironmentCommand());
 
         Bukkit.getLogger().log(Level.FINE, "Commands registered");

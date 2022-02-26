@@ -46,7 +46,9 @@ public class GrantsMenu extends PaginatedMenu {
             addToLore(itemMeta, "&eRemoved Reason: &f" + rankGrant.getRemovedReason());
             addToLore(itemMeta, "&eRemoved By: &f" + CompactAPI.INSTANCE.getColoredDisplay(rankGrant.getRemovedBy()));
         }
-        addToLore(itemMeta, " ");
+        addToLore(itemMeta, "&7&m----------------------");
+        addToLore(itemMeta, "&cClick to remove this grant");
+        addToLore(itemMeta, "");
 
         stack.setItemMeta(itemMeta);
 
