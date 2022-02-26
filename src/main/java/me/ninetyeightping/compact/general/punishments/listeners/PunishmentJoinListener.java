@@ -45,8 +45,6 @@ public class PunishmentJoinListener implements Listener {
             Punishment punishment = profile.getFirstPunishmentByType(PunishmentType.BAN);
 
             if (punishment.isActive()) {
-                System.out.println(punishment.getRemainingTime());
-                System.out.println(punishment.isActive());
                 event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
                 event.setKickMessage(Chat.format("&cYou are currently banned\n&cExpires In: " + (punishment.getDuration() == Long.MAX_VALUE ? "Never" : TimeUtil.formatDuration(punishment.getRemainingTime()))));
             }
