@@ -64,8 +64,39 @@ public class RankModificationCommands {
                 rank.save();
                 sender.sendMessage(Chat.format("&aUpdated internal weight"));
                 break;
+            case "displayweight":
+                rank.setDisplayWeight(Integer.parseInt(arg));
+                rank.save();
+                sender.sendMessage(Chat.format("&aUpdated display weight"));
+                break;
 
         }
 
+
         }
+
+    @Command(value = "rank info")
+    @Permission(value = "rank.admin")
+    public void rankInfoCommand(@Sender CommandSender sender, @Name("name") String name) {
+        if (!InjectionUtil.get(RankController.class).exists(name)) {
+            sender.sendMessage(Chat.format("&cRank doesn't exist"));
+            return;
+        }
+
+        Rank rank = InjectionUtil.get(RankController.class).getById(name);
+
+        sender.sendMessage(Chat.format("&7&m-------------------------------"));
+        sender.sendMessage(Chat.format("&fDisplaying rank info for" + name));
+        sender.sendMessage(Chat.format(""));
+        sender.sendMessage(Chat.format("   &7- id: &f" + rank.getId()));
+        sender.sendMessage(Chat.format("   &7- &Display Weight: &f" + rank.getDisplayWeight()));
+        sender.sendMessage(Chat.format("   &7- Internal Weight: &f" + rank.getInternalWeight()));
+        sender.sendMessage(Chat.format("   &7- Prefix: " + rank.getPrefix()));
+        sender.sendMessage(Chat.format("   &7- Staff: &f" + rank.isStaff()));
+        sender.sendMessage(Chat.format("&7&m-------------------------------"));
+
+        //TODO Add Permissions & Weight
+        //TODO Add rank delete (need to loop throught grants to remove it from that)
+    }
+
     }
